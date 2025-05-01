@@ -1,6 +1,25 @@
+<script setup lang="ts">
+import NavigationMenu from './ui/navigation-menu/NavigationMenu.vue';
+import NavigationMenuItem from './ui/navigation-menu/NavigationMenuItem.vue';
+import NavigationMenuLink from './ui/navigation-menu/NavigationMenuLink.vue';
+import NavigationMenuList from './ui/navigation-menu/NavigationMenuList.vue';
+import { navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
+
+</script>
+
 <template>
-    <nav>
-        <NuxtLink to="/">Accueil</NuxtLink>
-        <NuxtLink to="/livre">Mes livres</NuxtLink>
-    </nav>
+    <NavigationMenu>
+        <NavigationMenuList>
+            <NavigationMenuItem>
+                <NavigationMenuLink href="/">
+                    Accueil
+                </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+                <NavigationMenuLink href="/livre">
+                    Mes livres
+                </NavigationMenuLink>
+            </NavigationMenuItem>
+        </NavigationMenuList>
+    </NavigationMenu>
 </template>
