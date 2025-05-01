@@ -16,7 +16,7 @@ import { navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
                 </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-                <NavigationMenuLink href="/livre">
+                <NavigationMenuLink href="/livres">
                     Mes livres
                 </NavigationMenuLink>
             </NavigationMenuItem>

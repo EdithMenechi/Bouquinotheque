@@ -2,7 +2,7 @@
     <Label class="m-3">Mes livres</Label>
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
     <Card v-for="post in posts" :key="post.id" class="m-3 bg-red-100">
-        <CardTitle><NuxtLink :to="`/livre/${post.id}`">Titre</NuxtLink></CardTitle>
+        <CardTitle><NuxtLink :to="`/livres/${post.id}`">Titre</NuxtLink></CardTitle>
         <CardTitle>Auteurice(s)</CardTitle>
         <CardContent>
             <form>
