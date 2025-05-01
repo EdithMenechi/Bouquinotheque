@@ -1,7 +1,10 @@
-import { defineEventHandler } from 'h3'
-import { getLivres } from '~/server/database/livres'
+export default defineEventHandler(async (event) => {
 
-export default defineEventHandler(async () => {
-  const livres = await getLivres()
-  return livres
+  const sql = usePostgres()
+
+  const books = await sql`SELECT * FROM livres`
+
+  // Ensure the database connection is closed after the request is processed
+  event.waitUntil(sql.end())
+  return books
 })

@@ -1,8 +1,8 @@
 <template>
     <Label class="m-3">Mes livres</Label>
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
-    <Card v-for="post in posts" :key="post.id" class="m-3 bg-red-100">
-        <CardTitle><NuxtLink :to="`/livres/${post.id}`">Titre</NuxtLink></CardTitle>
+    <Card v-for="book in books" :key="book.id" class="m-3 bg-red-100">
+        <CardTitle><NuxtLink :to="`/livres/${post.id}`">{{ book.titre }} {{ book.id }}</NuxtLink></CardTitle>
         <CardTitle>Auteurice(s)</CardTitle>
         <CardContent>
             <form>
@@ -25,5 +25,6 @@ import CardContent from '~/components/ui/card/CardContent.vue';
 import CardTitle from '~/components/ui/card/CardTitle.vue';
 import Label from '~/components/ui/label/Label.vue';
 
-const { data: posts } = await useFetch('https://jsonplaceholder.typicode.com/posts?_limit=10')
+const { data: books } = await useFetch('/api/livres')
+
 </script>
