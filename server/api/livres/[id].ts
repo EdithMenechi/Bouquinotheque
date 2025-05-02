@@ -2,7 +2,9 @@ export default defineEventHandler(async (event) => {
 
   const sql = usePostgres()
 
-  const books = await sql
+  const { id } = getRouterParams(event)
+    
+  const book = await sql
   `
   SELECT
       l.*,
@@ -15,10 +17,10 @@ export default defineEventHandler(async (event) => {
       f.format
   FROM livres l
   LEFT JOIN formats f ON l.format_id = f.id
-  ORDER BY l.id
+  WHERE l.id= ${id}
   `
 
   // Ensure the database connection is closed after the request is processed
   event.waitUntil(sql.end())
-  return books
+  return book[0] || null
 })
