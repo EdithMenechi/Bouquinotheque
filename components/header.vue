@@ -12,12 +12,17 @@ import { navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
         <NavigationMenuList>
             <NavigationMenuItem>
                 <NavigationMenuLink href="/">
-                    Accueil
+                    Connexion
                 </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
                 <NavigationMenuLink href="/livres">
                     Mes livres
+                </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+                <NavigationMenuLink href="/ajout">
+                    Ajout d'un livre
                 </NavigationMenuLink>
             </NavigationMenuItem>
         </NavigationMenuList>

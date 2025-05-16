@@ -1,7 +1,7 @@
 <template>
     <Label class="m-3">Mes livres</Label>
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
-    <Card v-for="book in books" :key="book.id" class="m-3 bg-red-100">
+    <Card v-for="book in books" :key="book.id" class="m-3">
         <CardHeader>
         <CardTitle><NuxtLink :to="`/livres/${book.id}`">{{ book.titre }}</NuxtLink></CardTitle>
         <CardDescription v-if="book.auteurs?.length">{{ book.auteurs.join(', ') }}</CardDescription>

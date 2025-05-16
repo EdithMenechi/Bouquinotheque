@@ -10,7 +10,7 @@
             <div class="w-1/2 p-4 space-y-1.5">
                 <Label for="writer">{{ book.auteurs.join(', ') }}</Label>
                 <Label for="format">{{ book.format }}</Label>
-                <Textarea v-model="summary" placeholder="Résumé" class="bg-red-100"></Textarea>
+                <Textarea v-model="summary" placeholder="Résumé" class="bg-[#FFF8E7]"></Textarea>
             </div>
         </div>
         
@@ -18,7 +18,7 @@
         <Label for="place">Rangement</Label>
         <Label for="pagesnumber">Nb de pages</Label>
         <Label for="isbn">ISBN {{ book.isbn }}</Label>
-        <Textarea v-model="comment" placeholder="Commentaire" class="bg-red-100"></Textarea>
+        <Textarea v-model="comment" placeholder="Commentaire" class="bg-[#FFF8E7]"></Textarea>
         
         </div>
         <div v-else>Chargement</div>
