@@ -21,7 +21,7 @@ import { navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
                 </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-                <NavigationMenuLink href="/ajout">
+                <NavigationMenuLink href="/livres/ajouter">
                     Ajout d'un livre
                 </NavigationMenuLink>
             </NavigationMenuItem>

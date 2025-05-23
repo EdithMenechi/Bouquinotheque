@@ -1,3 +1,15 @@
+<script setup>
+import Card from '~/components/ui/card/Card.vue';
+import CardContent from '~/components/ui/card/CardContent.vue';
+import CardDescription from '~/components/ui/card/CardDescription.vue';
+import CardHeader from '~/components/ui/card/CardHeader.vue';
+import CardTitle from '~/components/ui/card/CardTitle.vue';
+import Label from '~/components/ui/label/Label.vue';
+
+const { data: books } = await useFetch('/api/livres', { server: false })
+
+</script>
+
 <template>
     <Label class="m-3">Mes livres</Label>
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
@@ -22,15 +34,3 @@
     </Card>
     </div>
 </template>
-
-<script setup>
-import Card from '~/components/ui/card/Card.vue';
-import CardContent from '~/components/ui/card/CardContent.vue';
-import CardDescription from '~/components/ui/card/CardDescription.vue';
-import CardHeader from '~/components/ui/card/CardHeader.vue';
-import CardTitle from '~/components/ui/card/CardTitle.vue';
-import Label from '~/components/ui/label/Label.vue';
-
-const { data: books } = await useFetch('/api/livres', { server: false })
-
-</script>

@@ -20,7 +20,6 @@ export default defineEventHandler(async (event) => {
   WHERE l.id= ${id}
   `
 
-  // Ensure the database connection is closed after the request is processed
   event.waitUntil(sql.end())
   return book[0] || null
 })

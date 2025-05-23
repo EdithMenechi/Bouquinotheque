@@ -18,7 +18,6 @@ export default defineEventHandler(async (event) => {
   ORDER BY l.id
   `
 
-  // Ensure the database connection is closed after the request is processed
   event.waitUntil(sql.end())
   return books
 })
