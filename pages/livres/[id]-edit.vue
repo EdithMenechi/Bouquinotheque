@@ -1,21 +1,31 @@
 <script setup>
-const new_book = reactive({
-  titre: ''
-})
+
+const route = useRoute()
+const { data: book } = await useFetch('/api/livres/' + route.params.id, { lazy: true }, { server: false })
 
 const message = ref('')
 
 async function saveBook() {
-  const { data, error } = await useFetch('/api/ajout', {
-    method: 'POST',
-    body: {titre: new_book.titre}
-  })
+    if (!book.value) {
+        message.value = "Chargement du livre en cours"
+        return
+    }
+
+    const { data, error } = await useFetch(`/api/livres/${book.value.id}`, {
+        method: 'PUT',
+          body: {
+            titre: book.value.titre,
+            sous_titre: book.value.sous_titre,
+            tome: book.value.tome,
+            isbn: book.value.isbn
+        }
+    })
 
   if (error.value) {
     message.value = "Erreur lors de la sauvegarde"
     console.error(error.value)
   } else {
-    message.value = `Livre ajouté avec succès (ID : ${data.value.id})`
+    message.value = `Livre modifié avec succès (ID : ${data.value.id})`
   }
 }
 </script> 
@@ -23,13 +33,13 @@ async function saveBook() {
 <template>    
 <Card class="m-3">
     <CardHeader>
-        <CardTitle>Ajout d'un livre</CardTitle>
+        <CardTitle>Edition d'un livre</CardTitle>
     </CardHeader>
     <CardContent>
       <form @submit.prevent="saveBook">
           <div class="mb-3">
             <Label class="ml-3 mb-1">Titre</Label>
-            <Input class="bg-white" id="title" type="text" v-model="new_book.titre" required placeholder="Titre du livre"/>
+            <Input class="bg-white" id="title" type="text" v-model="book.titre" required placeholder="Titre du livre"/>
           </div>
           <div class="mb-3">
             <Label class="ml-3 mb-1">Auteur.ice(s)</Label>
@@ -41,11 +51,11 @@ async function saveBook() {
           </div>
           <div class="mb-3">
             <Label class="ml-3 mb-1">Tome</Label>
-            <Input class="bg-white" id="tome" type="text" v-model="new_book.tome"/>
+            <Input class="bg-white" id="tome" type="text" v-model="book.tome"/>
           </div>
           <div class="mb-3">
             <Label class= "ml-3 mb-1">Sous-titre</Label>
-            <Input class="bg-white" id="subtitle" type="text" v-model="new_book.sous_titre"/>
+            <Input class="bg-white" id="subtitle" type="text" v-model="book.sous_titre"/>
           </div>
           <div class="mb-3">
             <Label class="ml-3 mb-1">Format</Label>
@@ -57,7 +67,7 @@ async function saveBook() {
           </div>
           <div class="mb-3">
             <Label class="ml-3 mb-1">ISBN</Label>
-            <Input class="bg-white" id="isbn" type="text" v-model="new_book.isbn"/>
+            <Input class="bg-white" id="isbn" type="text" v-model="book.isbn"/>
           </div>
           <div class="mb-3">
             <Label class="ml-3 mb-1">Résumé</Label>

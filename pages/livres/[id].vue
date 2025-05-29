@@ -28,7 +28,7 @@ const { data: book } = await useFetch('/api/livres/' + route.params.id, { lazy: 
         <Label for="isbn">ISBN {{ book.isbn }}</Label>
         <Textarea v-model="comment" placeholder="Commentaire" class="bg-[#FFF8E7]"></Textarea>
         <div class="space-x-3">
-            <Button>Modifier</Button>
+            <Button><NuxtLink :to="`/livres/${book.id}-edit`">Modifier</NuxtLink></Button>
             <Button>Supprimer
             </Button>
         </div>
