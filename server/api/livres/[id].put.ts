@@ -11,7 +11,6 @@ export default defineEventHandler(async (event) => {
   const { titre, sous_titre, tome, isbn } = body
   
   try {
-    // La requête UPDATE avec des paramètres pour éviter les injections SQL
     const result = await sql
       `UPDATE livres
        SET titre = ${titre},

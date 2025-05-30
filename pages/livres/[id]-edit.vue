@@ -1,13 +1,14 @@
 <script setup>
+import { useToaster } from '@/stores/useToaster'
 
 const route = useRoute()
 const { data: book } = await useFetch('/api/livres/' + route.params.id, { lazy: true }, { server: false })
 
-const message = ref('')
+const toaster = useToaster()
 
 async function saveBook() {
     if (!book.value) {
-        message.value = "Chargement du livre en cours"
+      toaster.showToast("Chargement du livre en cours...", "error")
         return
     }
 
@@ -22,10 +23,11 @@ async function saveBook() {
     })
 
   if (error.value) {
-    message.value = "Erreur lors de la sauvegarde"
+    toaster.showToast("Erreur lors de la sauvegarde", "error")
     console.error(error.value)
   } else {
-    message.value = `Livre modifié avec succès (ID : ${data.value.id})`
+    toaster.showToast(`Livre modifié avec succès (ID : ${data.value.id})`, "success")
+    navigateTo(`/livres/${data.value.id}`)
   }
 }
 </script> 
@@ -80,7 +82,9 @@ async function saveBook() {
           <div class="mb-3">
               <Button>Sauvegarder</Button>
           </div>
-          <div v-if="message" class="mt-4">{{ message }}</div>
+          <div>
+            <Toast />
+          </div>
       </form>
     </CardContent>
 </Card>

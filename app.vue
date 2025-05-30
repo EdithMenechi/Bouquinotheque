@@ -4,6 +4,7 @@
     <NuxtRouteAnnouncer/>
     <Header/>
    <NuxtPage />
+   <Toast />
   </div>
 </template>
 

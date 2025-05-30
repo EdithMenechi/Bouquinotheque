@@ -1,21 +1,24 @@
 <script setup>
+import { useToaster } from '@/stores/useToaster'
+
 const new_book = reactive({
   titre: ''
 })
 
-const message = ref('')
+const toaster = useToaster()
 
 async function saveBook() {
-  const { data, error } = await useFetch('/api/ajout', {
+  const { data, error } = await useFetch('/api/livres', {
     method: 'POST',
     body: {titre: new_book.titre}
   })
 
   if (error.value) {
-    message.value = "Erreur lors de la sauvegarde"
+    toaster.showToast("Erreur lors de la sauvegarde", "error")
     console.error(error.value)
   } else {
-    message.value = `Livre ajouté avec succès (ID : ${data.value.id})`
+    toaster.showToast(`Livre ajouté avec succès (ID : ${data.value.id})`, "success")
+    navigateTo(`/livres/${data.value.id}`)
   }
 }
 </script> 
@@ -70,7 +73,6 @@ async function saveBook() {
           <div class="mb-3">
               <Button>Sauvegarder</Button>
           </div>
-          <div v-if="message" class="mt-4">{{ message }}</div>
       </form>
     </CardContent>
 </Card>
