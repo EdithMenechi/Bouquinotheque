@@ -13,8 +13,10 @@
     "@pinia/nuxt": "^0.11.0",
     "@tailwindcss/vite": "^4.1.2",
     "@vueuse/core": "^13.3.0",
+    "bcrypt": "^6.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "jose": "^6.0.12",
     "lucide-vue-next": "^0.487.0",
     "nuxt": "^3.16.0",
     "postgres": "^3.4.5",
@@ -28,6 +30,8 @@
     "vue-sonner": "^2.0.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "typescript": "^5.8.2"
   }
 }

@@ -61,7 +61,7 @@ async function deleteBook() {
         <Label for="isbn">ISBN {{ book.isbn }}</Label>
         <Textarea v-model="comment" placeholder="Commentaire" class="bg-[#FFF8E7]"></Textarea>
         <div class="space-x-3">
-            <Button @click="`/livres/${book.id}-edit`">Modifier</Button>
+            <Button @click="router.push(`/livres/${book.id}-edit`)">Modifier</Button>
             <AlertDialog v-model:open="isDialogOpen">
                 <AlertDialogTrigger as-child>
                     <Button @click="isDialogOpen = true">Supprimer</Button>

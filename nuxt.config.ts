@@ -23,5 +23,8 @@ export default defineNuxtConfig({
      * @default "./components/ui"
      */
     componentDir: './components/ui'
+  },
+  runtimeConfig: {
+  JWT_SECRET: process.env.JWT_SECRET,
   }
 })
