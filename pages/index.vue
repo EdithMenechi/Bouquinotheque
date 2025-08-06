@@ -1,11 +1,12 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuth } from '~/composables/useAuth'
 
 const email = ref('')
 const password = ref('')
 const erreur = ref('')
-const token = ref('')
+const { setToken } = useAuth()
 const router = useRouter()
 
 const connecter = async () => {
@@ -24,10 +25,12 @@ const connecter = async () => {
     if (data.error) {
       erreur.value = data.error
     } else {
-      token.value = data.token
+      setToken(data.token)
+      router.push('/livres') 
     }
   } catch (e) {
     erreur.value = 'Erreur de connexion au serveur'
+    console.error(e)
   }
 }
 </script>
@@ -53,10 +56,6 @@ const connecter = async () => {
           </div>
           <div class="mb-3">
             <Button>Connexion</Button>
-          </div>
-          <div v-if="token" class="text-green-500 text-sm">
-            Token récupéré avec succès :<br />
-            <code class="break-all">{{ token }}</code>
           </div>
         </form>
     </CardContent>
