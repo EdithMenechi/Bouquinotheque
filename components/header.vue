@@ -21,11 +21,11 @@ const deconnecter = () => {
       Connecté en tant que : <strong>{{ utilisateur.nom }}</strong> ({{ utilisateur.email }})
       <Button @click="deconnecter">Déconnexion</Button>
     </div>
-    <NavigationMenu>
+    <NavigationMenu v-if="utilisateur">
         <NavigationMenuList>
             <NavigationMenuItem>
-                <NavigationMenuLink href="/">
-                    Connexion
+                <NavigationMenuLink href="/profil">
+                    Profil
                 </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
