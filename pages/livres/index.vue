@@ -5,8 +5,19 @@ import CardDescription from '~/components/ui/card/CardDescription.vue';
 import CardHeader from '~/components/ui/card/CardHeader.vue';
 import CardTitle from '~/components/ui/card/CardTitle.vue';
 import Label from '~/components/ui/label/Label.vue';
+import { ref } from 'vue'
+import { useAuth } from '~/composables/useAuth'
 
-const { data: books } = await useFetch('/api/livres', { server: false })
+const { token, utilisateur, load } = useAuth()
+
+load()
+
+const { data: books, error } = await useFetch('/api/livres', {
+    server: false,
+    headers: {
+    Authorization: `Bearer ${token.value}`
+  }
+})
 
 </script>
 

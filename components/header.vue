@@ -10,7 +10,8 @@ const { utilisateur, clear } = useAuth()
 const router = useRouter()
 
 const deconnecter = () => {
-  clear()
+    clear()
+    router.push('/')
 }
 
 </script>
