@@ -1,6 +1,7 @@
 import { ref, onMounted } from 'vue'
 
 const token = ref<string | null>(null)
+const utilisateur = ref<{ id: number; nom: string; email: string } | null>(null)
 
 export function useAuth() {
   const setToken = (newToken: string) => {
@@ -10,28 +11,41 @@ export function useAuth() {
     }
   }
 
-  const clearToken = () => {
-    token.value = null
+  const setUtilisateur = (data: typeof utilisateur.value) => {
+    utilisateur.value = data
     if (process.client) {
-      localStorage.removeItem('token')
+      localStorage.setItem('utilisateur', JSON.stringify(data))
     }
   }
 
-  const loadToken = () => {
+  const clear = () => {
+    token.value = null
+    utilisateur.value = null
     if (process.client) {
-      const saved = localStorage.getItem('token')
-      if (saved) token.value = saved
+      localStorage.removeItem('token')
+      localStorage.removeItem('utilisateur')
+    }
+  }
+
+  const load = () => {
+    if (process.client) {
+      const savedToken  = localStorage.getItem('token')
+      const savedUser = localStorage.getItem('utilisateur')
+      if (savedToken) token.value = savedToken
+      if (savedUser) utilisateur.value = JSON.parse(savedUser)
     }
   }
 
   onMounted(() => {
-    loadToken()
+    load()
   })
 
   return {
     token,
+    utilisateur,
     setToken,
-    clearToken,
-    loadToken
+    setUtilisateur,
+    clear,
+    load
   }
 }

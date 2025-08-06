@@ -12,10 +12,10 @@
 import { onMounted } from 'vue'
 import { useAuth } from '~/composables/useAuth'
 
-const { loadToken } = useAuth()
+const { load } = useAuth()
 
 onMounted(() => {
-  loadToken()
+  load()
 })
 
 const config = useAppConfig()

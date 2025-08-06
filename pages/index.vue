@@ -6,7 +6,7 @@ import { useAuth } from '~/composables/useAuth'
 const email = ref('')
 const password = ref('')
 const erreur = ref('')
-const { setToken } = useAuth()
+const { setToken, setUtilisateur } = useAuth()
 const router = useRouter()
 
 const connecter = async () => {
@@ -26,6 +26,7 @@ const connecter = async () => {
       erreur.value = data.error
     } else {
       setToken(data.token)
+      setUtilisateur(data.utilisateur)
       router.push('/livres') 
     }
   } catch (e) {
