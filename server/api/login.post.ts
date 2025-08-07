@@ -36,6 +36,7 @@ export default defineEventHandler(async (event) => {
 
     const token = await new SignJWT({
       id: utilisateur.id,
+      nom: utilisateur.nom,
       email: utilisateur.email
     })
       .setProtectedHeader({ alg: 'HS256' })

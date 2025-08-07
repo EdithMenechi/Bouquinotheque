@@ -1,4 +1,4 @@
-import { defineEventHandler, getHeader, H3Event } from 'h3'
+import { defineEventHandler } from 'h3'
 import { jwtVerify } from 'jose'
 import { usePostgres } from '~/server/utils/postgres'
 import { useRuntimeConfig } from '#imports'
@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     return { error: 'Token d’authentification manquant' }
   }
 
-  const token = authHeader.slice(7) // retirer 'Bearer '
+  const token = authHeader.slice(7)
 
   let userId: number
   try {

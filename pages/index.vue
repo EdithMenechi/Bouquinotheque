@@ -28,6 +28,8 @@ const connecter = async () => {
       erreur.value = data.error
     } else {
       setToken(data.token)
+      console.log('Token reçu :', data.token)
+
       setUtilisateur(data.utilisateur)
       router.push('/livres') 
     }

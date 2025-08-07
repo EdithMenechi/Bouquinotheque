@@ -17,8 +17,8 @@ const deconnecter = () => {
 </script>
 
 <template>
-    <div v-if="utilisateur">
-      Connecté en tant que : <strong>{{ utilisateur.nom }}</strong> ({{ utilisateur.email }})
+    <div v-if="utilisateur" class="space-x-3">
+      <strong>Bonjour {{ utilisateur.nom }}</strong>
       <Button @click="deconnecter">Déconnexion</Button>
     </div>
     <NavigationMenu v-if="utilisateur">
