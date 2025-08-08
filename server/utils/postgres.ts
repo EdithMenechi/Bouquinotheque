@@ -1,6 +1,6 @@
 import postgres from 'postgres'
 
-export function usePostgres () {
+export function usePostgres() {
   if (!process.env.NUXT_POSTGRES_URL) {
     throw createError('Missing `NUXT_POSTGRES_URL` environment variable')
   }

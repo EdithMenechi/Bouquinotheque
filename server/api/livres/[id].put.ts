@@ -1,18 +1,16 @@
 export default defineEventHandler(async (event) => {
+  const sql = usePostgres()
+  const body = await readBody(event)
+  const id = event.context.params?.id
 
-    const sql = usePostgres()
-    const body = await readBody(event)
-    const id = event.context.params?.id
+  if (!id) {
+    throw createError({ statusCode: 400, statusMessage: 'ID manquant' })
+  }
 
-    if (!id) {
-        throw createError({ statusCode: 400, statusMessage: "ID manquant"})
-    }
-        
   const { titre, sous_titre, tome, isbn } = body
-  
+
   try {
-    const result = await sql
-      `UPDATE livres
+    const result = await sql`UPDATE livres
        SET titre = ${titre},
           sous_titre = ${sous_titre},
           tome = ${tome},
@@ -21,14 +19,15 @@ export default defineEventHandler(async (event) => {
       RETURNING *
         `
 
-        if (result.length === 0) {
-          throw createError({ statusCode: 404, statusMessage: "Livre non trouvé" })
-        }
+    if (result.length === 0) {
+      throw createError({ statusCode: 404, statusMessage: 'Livre non trouvé' })
+    }
     return result[0]
-
   } catch (error) {
     console.error(error)
-    throw createError({ statusCode: 500, statusMessage: "Erreur lors de la mise à jour" })
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Erreur lors de la mise à jour',
+    })
   }
-   
-  })
+})

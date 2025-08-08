@@ -9,7 +9,10 @@ export default defineEventHandler(async (event) => {
   const authHeader = getHeader(event, 'authorization')
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    throw createError({ statusCode: 401, statusMessage: 'Token d’authentification manquant' })
+    throw createError({
+      statusCode: 401,
+      statusMessage: 'Token d’authentification manquant',
+    })
   }
 
   const token = authHeader.slice(7)
@@ -24,13 +27,15 @@ export default defineEventHandler(async (event) => {
 
   const sql = usePostgres()
 
-  const profil = await sql
-  `
+  const profil = await sql`
   SELECT * FROM utilisateurs WHERE id = ${userId} LIMIT 1
   `
 
   if (!profil || profil.length === 0) {
-    throw createError({ statusCode: 404, statusMessage: 'Utilisateur non trouvé' })
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'Utilisateur non trouvé',
+    })
   }
 
   return profil[0]

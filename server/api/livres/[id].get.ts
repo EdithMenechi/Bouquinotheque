@@ -1,11 +1,9 @@
 export default defineEventHandler(async (event) => {
-
   const sql = usePostgres()
 
   const { id } = getRouterParams(event)
-    
-  const book = await sql
-  `
+
+  const book = await sql`
   SELECT
       l.*,
       (SELECT

@@ -29,7 +29,7 @@ export function useAuth() {
 
   const load = () => {
     if (process.client) {
-      const savedToken  = localStorage.getItem('token')
+      const savedToken = localStorage.getItem('token')
       const savedUser = localStorage.getItem('utilisateur')
       if (savedToken) token.value = savedToken
       if (savedUser) utilisateur.value = JSON.parse(savedUser)
@@ -46,6 +46,6 @@ export function useAuth() {
     setToken,
     setUtilisateur,
     clear,
-    load
+    load,
   }
 }

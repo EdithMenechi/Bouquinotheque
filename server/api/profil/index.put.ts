@@ -16,7 +16,10 @@ export default defineEventHandler(async (event) => {
   const token = authHeader.slice(7)
 
   const sql = usePostgres()
+  const body = await readBody(event)
   let userId: number
+  const { nom, email } = body
+
   try {
     const { payload } = await jwtVerify(token, new TextEncoder().encode(SECRET))
     userId = payload.id as number
@@ -31,23 +34,23 @@ export default defineEventHandler(async (event) => {
 
   try {
     const result = await sql`
-        DELETE FROM utilisateurs
+        UPDATE utilisateurs
+            SET nom = ${nom},
+                email = ${email}
         WHERE id = ${userId}
         RETURNING *
-      `
+        `
 
     if (result.length === 0) {
       throw createError({ statusCode: 404, statusMessage: 'Profil non trouvé' })
     }
 
-    return { message: 'Profil supprimé avec succès', id: result[0].id }
+    return result[0]
   } catch (error) {
     console.error(error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Erreur lors de la suppression',
+      statusMessage: 'Erreur lors de la mise à jour',
     })
-  } finally {
-    event.waitUntil(sql.end())
   }
 })

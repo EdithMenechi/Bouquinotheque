@@ -4,30 +4,29 @@ import { usePostgres } from '~/server/utils/postgres'
 import { useRuntimeConfig } from '#imports'
 
 export default defineEventHandler(async (event) => {
-    const config = useRuntimeConfig()
-    const SECRET = config.JWT_SECRET
-    const authHeader = getRequestHeader(event, 'authorization')
-  
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      event.node.res.statusCode = 401
-      return { error: 'Token d’authentification manquant' }
-    }
-  
-    const token = authHeader.slice(7)
-  
-    let userId: number
-    try {
-      const { payload } = await jwtVerify(token, new TextEncoder().encode(SECRET))
-      userId = payload.id as number
-    } catch (err) {
-      event.node.res.statusCode = 401
-      return { error: 'Token invalide' }
-    }
-  
-    const sql = usePostgres()
-  
-    const books = await sql
-    `
+  const config = useRuntimeConfig()
+  const SECRET = config.JWT_SECRET
+  const authHeader = getRequestHeader(event, 'authorization')
+
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    event.node.res.statusCode = 401
+    return { error: 'Token d’authentification manquant' }
+  }
+
+  const token = authHeader.slice(7)
+
+  let userId: number
+  try {
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(SECRET))
+    userId = payload.id as number
+  } catch (err) {
+    event.node.res.statusCode = 401
+    return { error: 'Token invalide' }
+  }
+
+  const sql = usePostgres()
+
+  const books = await sql`
     SELECT
         l.*,
         (SELECT
@@ -43,7 +42,7 @@ export default defineEventHandler(async (event) => {
     WHERE ul.utilisateur_id = ${userId}
     ORDER BY l.id
     `
-  
-    event.waitUntil(sql.end())
-    return books
+
+  event.waitUntil(sql.end())
+  return books
 })

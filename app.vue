@@ -1,10 +1,10 @@
 <template>
   <div>
-    <NuxtLoadingIndicator/>
-    <NuxtRouteAnnouncer/>
-    <Header/>
-   <NuxtPage />
-   <Toast />
+    <NuxtLoadingIndicator />
+    <NuxtRouteAnnouncer />
+    <Header />
+    <NuxtPage />
+    <Toast />
   </div>
 </template>
 
@@ -20,6 +20,6 @@ onMounted(() => {
 
 const config = useAppConfig()
 useSeoMeta({
-  title: config.title
+  title: config.title,
 })
 </script>
