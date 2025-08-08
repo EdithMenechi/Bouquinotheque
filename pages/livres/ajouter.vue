@@ -1,15 +1,22 @@
 <script setup>
+import { useAuth } from '~/composables/useAuth'
 import { useToaster } from '@/stores/useToaster'
+
+const { token, load } = useAuth()
+const toaster = useToaster()
+
+load()
 
 const new_book = reactive({
   titre: '',
 })
 
-const toaster = useToaster()
-
 async function saveBook() {
   const { data, error } = await useFetch('/api/livres', {
     method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token.value}`,
+    },
     body: { titre: new_book.titre },
   })
 
