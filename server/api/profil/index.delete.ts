@@ -7,14 +7,15 @@ export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig()
     const SECRET = config.JWT_SECRET
     const authHeader = getRequestHeader(event, 'authorization')
-  
+
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       event.node.res.statusCode = 401
       return { error: 'Token d’authentification manquant' }
     }
-  
+
     const token = authHeader.slice(7)
-  
+
+    const sql = usePostgres()
     let userId: number
     try {
       const { payload } = await jwtVerify(token, new TextEncoder().encode(SECRET))
@@ -24,26 +25,26 @@ export default defineEventHandler(async (event) => {
       return { error: 'Token invalide' }
     }
   
-    const sql = usePostgres()
+    if (!userId) {
+        throw createError({ statusCode: 400, statusMessage: "ID manquant" })
+    }
+    
+    try {
+        const result = await sql`
+        DELETE FROM utilisateurs
+        WHERE id = ${userId}
+        RETURNING *
+      `
+        
+      if (result.length === 0) {
+        throw createError({ statusCode: 404, statusMessage: "Profil non trouvé" })
+      }
   
-    const books = await sql
-    `
-    SELECT
-        l.*,
-        (SELECT
-            array_agg(a.nom)
-            FROM auteurs a
-            LEFT JOIN livres_auteurs la ON a.id = la.auteur_id
-            WHERE la.livre_id = l.id
-         ) as auteurs,
-        f.format
-    FROM livres l
-    LEFT JOIN formats f ON l.format_id = f.id
-    INNER JOIN utilisateurs_livres ul ON ul.livre_id = l.id
-    WHERE ul.utilisateur_id = ${userId}
-    ORDER BY l.id
-    `
-  
-    event.waitUntil(sql.end())
-    return books
-})
+      return { message: 'Profil supprimé avec succès', id: result[0].id }
+    } catch (error) {
+      console.error(error)
+      throw createError({ statusCode: 500, statusMessage: "Erreur lors de la suppression" })
+    } finally {
+      event.waitUntil(sql.end())
+    }
+  })

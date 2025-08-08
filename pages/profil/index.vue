@@ -1,7 +1,9 @@
 <script setup>
 import { useAuth } from '~/composables/useAuth'
+import { useToaster } from '@/stores/useToaster'
 
-const { token, load } = useAuth()
+const { token, load, clear } = useAuth()
+const toaster = useToaster()
 
 load()
 
@@ -11,6 +13,30 @@ const { data: profil, error } = await useFetch('/api/profil', {
       Authorization: `Bearer ${token.value}`
     }
 })
+
+const isDialogOpen = ref(false)
+
+async function deleteProfil() {
+    try {
+        const { data, error, status } = await useFetch(`/api/profil`, {
+            method: 'DELETE',
+            headers: {
+               Authorization: `Bearer ${token.value}`
+            }
+        })
+        if (error.value) {
+            toaster.showToast("Erreur lors de la suppression", "error")
+            console.error(error.value)
+            return
+      }
+
+      toaster.showToast("Profil supprimé avec succès", "success")
+      clear()
+      navigateTo('/')
+    } catch (e) {
+        toaster.showToast("Erreur réseau", "error")
+    }    
+}
 </script>
 
 <template>
@@ -36,8 +62,8 @@ const { data: profil, error } = await useFetch('/api/profil', {
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <!-- <AlertDialogCancel @click="isDialogOpen = false">Conserver le profil</AlertDialogCancel>
-                    <AlertDialogAction @click="() => { deleteProfil(); isDialogOpen = false }">Supprimer le profil</AlertDialogAction> -->
+                    <AlertDialogCancel @click="isDialogOpen = false">Conserver le profil</AlertDialogCancel>
+                    <AlertDialogAction @click="() => { deleteProfil(); isDialogOpen = false }">Supprimer le profil</AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
