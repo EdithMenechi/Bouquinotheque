@@ -1,16 +1,21 @@
 import { defineEventHandler } from 'h3'
 import { jwtVerify } from 'jose'
-import { usePostgres } from '~/server/utils/postgres'
 import { useRuntimeConfig } from '#imports'
+import { usePostgres } from '~/server/utils/postgres'
 
 export default defineEventHandler(async (event) => {
+  // 1. Chargement de la configuration et initialisation de la BDD
   const config = useRuntimeConfig()
   const SECRET = config.JWT_SECRET
-  const authHeader = getRequestHeader(event, 'authorization')
+  const sql = usePostgres()
 
+  // 2. Authentification
+  const authHeader = getRequestHeader(event, 'authorization')
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    event.node.res.statusCode = 401
-    return { error: 'Token d’authentification manquant' }
+    throw createError({
+      statusCode: 401,
+      statusMessage: 'Token d’authentification manquant',
+    })
   }
 
   const token = authHeader.slice(7)
@@ -24,8 +29,7 @@ export default defineEventHandler(async (event) => {
     return { error: 'Token invalide' }
   }
 
-  const sql = usePostgres()
-
+  // 3. Récupération des livres
   const books = await sql`
     SELECT
         l.*,
@@ -43,6 +47,9 @@ export default defineEventHandler(async (event) => {
     ORDER BY l.id
     `
 
+  // 4. Fin propre de la connexion
   event.waitUntil(sql.end())
+
+  // 5. Réponse
   return books
 })

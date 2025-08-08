@@ -1,13 +1,16 @@
 import { defineEventHandler, getHeader, createError } from 'h3'
 import { jwtVerify } from 'jose'
-import { usePostgres } from '~/server/utils/postgres'
 import { useRuntimeConfig } from '#imports'
+import { usePostgres } from '~/server/utils/postgres'
 
 export default defineEventHandler(async (event) => {
+  // 1. Chargement de la configuration et initialisation de la BDD
   const config = useRuntimeConfig()
   const SECRET = config.JWT_SECRET
-  const authHeader = getHeader(event, 'authorization')
+  const sql = usePostgres()
 
+  // 2. Authentification
+  const authHeader = getHeader(event, 'authorization')
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     throw createError({
       statusCode: 401,
@@ -25,18 +28,21 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 401, statusMessage: 'Token invalide' })
   }
 
-  const sql = usePostgres()
-
-  const profil = await sql`
+  // 3. Récupération de l'utilisateur
+  const profile = await sql`
   SELECT * FROM utilisateurs WHERE id = ${userId} LIMIT 1
   `
 
-  if (!profil || profil.length === 0) {
+  if (!profile || profile.length === 0) {
     throw createError({
       statusCode: 404,
       statusMessage: 'Utilisateur non trouvé',
     })
   }
 
-  return profil[0]
+  // 5. Fin propre de la connexion
+  event.waitUntil(sql.end())
+
+  // 6. Réponse
+  return profile[0]
 })

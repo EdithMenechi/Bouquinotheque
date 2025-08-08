@@ -4,11 +4,12 @@ import { useRuntimeConfig } from '#imports'
 import { usePostgres } from '~/server/utils/postgres'
 
 export default defineEventHandler(async (event) => {
+  // 1. Chargement de la configuration et initialisation de la BDD
   const config = useRuntimeConfig()
   const SECRET = config.JWT_SECRET
   const sql = usePostgres()
 
-  // 1. Authentification
+  // 2. Authentification
   const authHeader = getHeader(event, 'authorization')
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     throw createError({
@@ -27,38 +28,38 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 401, statusMessage: 'Token invalide' })
   }
 
-  // 2. Lecture du corps de la requête
+  // 3. Lecture du corps de la requête
   const body = await readBody(event)
-  const { titre } = body
+  const { title } = body
 
-  if (!titre) {
+  if (!title) {
     throw createError({ statusCode: 400, statusMessage: 'Titre manquant' })
   }
 
-  // 3. Insertion du livre
+  // 4. Insertion du livre
   const newBook = await sql`
     INSERT INTO livres (titre)
-    VALUES (${titre})
+    VALUES (${title})
     RETURNING id
   `
 
-  const livreId = newBook[0]?.id
-  if (!livreId) {
+  const bookId = newBook[0]?.id
+  if (!bookId) {
     throw createError({
       statusCode: 500,
       statusMessage: 'Échec lors de la création du livre',
     })
   }
 
-  // 4. Insertion dans la table de liaison
+  // 5. Insertion dans la table de liaison
   await sql`
     INSERT INTO utilisateurs_livres (utilisateur_id, livre_id)
-    VALUES (${userId}, ${livreId})
+    VALUES (${userId}, ${bookId})
   `
 
-  // 5. Fin propre de la connexion
+  // 6. Fin propre de la connexion
   event.waitUntil(sql.end())
 
-  // 6. Réponse
-  return { success: true, id: livreId }
+  // 7. Réponse
+  return { success: true, id: bookId }
 })

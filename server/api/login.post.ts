@@ -1,54 +1,68 @@
 import { defineEventHandler, readBody } from 'h3'
-import { useRuntimeConfig } from '#imports'
 import { SignJWT } from 'jose'
 import * as bcrypt from 'bcrypt'
+import { useRuntimeConfig } from '#imports'
 import { usePostgres } from '~/server/utils/postgres'
 
 export default defineEventHandler(async (event) => {
+  // 1. Chargement de la configuration et initialisation de la BDD
   const config = useRuntimeConfig()
   const SECRET = config.JWT_SECRET
-
-  const body = await readBody(event)
-  const { email, mot_de_passe } = body
-
-  if (!email || !mot_de_passe) {
-    return { error: 'Email et mot de passe requis' }
-  }
-
   const sql = usePostgres()
 
-  const [utilisateur] = await sql`
+  // 2. Lecture du corps de la requête
+  const body = await readBody(event)
+  const { email, password } = body
+
+  if (!email || !password) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Email et mot de passe requis',
+    })
+  }
+
+  // 3. Recherche de l'utilisateur
+  const [user] = await sql`
     SELECT * FROM utilisateurs WHERE email = ${email}
   `
   await sql.end()
 
-  if (!utilisateur) {
-    return { error: 'Utilisateur non trouvé' }
+  if (!user) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'Utilisateur non trouvé',
+    })
   }
 
-  const valid = await bcrypt.compare(mot_de_passe, utilisateur.mot_de_passe)
+  // 4. Vérification du mot de passe
+  const valid = await bcrypt.compare(password, user.password)
 
   if (!valid) {
-    return { error: 'Mot de passe incorrect' }
+    throw createError({
+      statusCode: 401,
+      statusMessage: 'Mot de passe incorrect',
+    })
   }
 
+  // 5. Génération du token JWT
   const secretKey = new TextEncoder().encode(SECRET)
 
   const token = await new SignJWT({
-    id: utilisateur.id,
-    nom: utilisateur.nom,
-    email: utilisateur.email,
+    id: user.id,
+    nom: user.name,
+    email: user.email,
   })
     .setProtectedHeader({ alg: 'HS256' })
     .setExpirationTime('1h')
     .sign(secretKey)
 
+  // 6. Réponse avec le token et les infos utilisateur
   return {
     token,
-    utilisateur: {
-      id: utilisateur.id,
-      nom: utilisateur.nom,
-      email: utilisateur.email,
+    user: {
+      id: user.id,
+      nom: user.name,
+      email: user.email,
     },
   }
 })
