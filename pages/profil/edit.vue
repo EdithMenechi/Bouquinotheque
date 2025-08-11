@@ -1,6 +1,7 @@
 <script setup>
 import { useAuth } from '~/composables/useAuth'
 import { useToaster } from '@/stores/useToaster'
+import { navigateTo } from '#app'
 
 const { token, load } = useAuth()
 const toaster = useToaster()
@@ -20,26 +21,22 @@ async function saveProfil() {
     return
   }
 
-  const { data, error } = await useFetch(`/api/profil`, {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${token.value}`,
-    },
-    body: {
-      nom: profil.value.nom,
-      email: profil.value.email,
-    },
-  })
-
-  if (error.value) {
-    toaster.showToast('Erreur lors de la sauvegarde', 'error')
-    console.error(error.value)
-  } else {
-    toaster.showToast(
-      `Profil modifié avec succès (ID : ${data.value.id})`,
-      'success'
-    )
+  try {
+    const data = await $fetch(`/api/profil`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
+      body: {
+        name: profil.value.name,
+        email: profil.value.email,
+      },
+    })
+    toaster.showToast(`Profil modifié avec succès`, 'success')
     navigateTo(`/profil`)
+  } catch (error) {
+    toaster.showToast('Erreur lors de la sauvegarde', 'error')
+    console.error(error)
   }
 }
 </script>
@@ -52,7 +49,7 @@ async function saveProfil() {
         class="bg-white"
         id="name"
         type="text"
-        v-model="profil.nom"
+        v-model="profil.name"
         required
         placeholder="Nom d'utilisateur"
       />

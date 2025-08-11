@@ -1,6 +1,7 @@
 <script setup>
 import { useAuth } from '~/composables/useAuth'
 import { useToaster } from '@/stores/useToaster'
+import { navigateTo } from '#app'
 
 const { token, load } = useAuth()
 const toaster = useToaster()
@@ -8,27 +9,23 @@ const toaster = useToaster()
 load()
 
 const new_book = reactive({
-  titre: '',
+  title: '',
 })
 
 async function saveBook() {
-  const { data, error } = await useFetch('/api/livres', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token.value}`,
-    },
-    body: { titre: new_book.titre },
-  })
-
-  if (error.value) {
+  try {
+    const data = await $fetch('/api/books', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
+      body: { title: new_book.title },
+    })
+    toaster.showToast(`Livre ajouté avec succès (ID : ${data.id})`, 'success')
+    navigateTo(`/books/${data.id}`)
+  } catch (error) {
     toaster.showToast('Erreur lors de la sauvegarde', 'error')
-    console.error(error.value)
-  } else {
-    toaster.showToast(
-      `Livre ajouté avec succès (ID : ${data.value.id})`,
-      'success'
-    )
-    navigateTo(`/livres/${data.value.id}`)
+    console.error(error)
   }
 }
 </script>
@@ -46,7 +43,7 @@ async function saveBook() {
             class="bg-white"
             id="title"
             type="text"
-            v-model="new_book.titre"
+            v-model="new_book.title"
             required
             placeholder="Titre du livre"
           />
@@ -73,9 +70,9 @@ async function saveBook() {
           <Label class="ml-3 mb-1">Tome</Label>
           <Input
             class="bg-white"
-            id="tome"
+            id="volume"
             type="text"
-            v-model="new_book.tome"
+            v-model="new_book.volume"
           />
         </div>
         <div class="mb-3">
@@ -84,7 +81,7 @@ async function saveBook() {
             class="bg-white"
             id="subtitle"
             type="text"
-            v-model="new_book.sous_titre"
+            v-model="new_book.subtitle"
           />
         </div>
         <div class="mb-3">

@@ -1,40 +1,34 @@
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAuth } from '~/composables/useAuth'
 
 const showConnexion = ref(false)
 const showCreation = ref(false)
 const email = ref('')
 const password = ref('')
-const erreur = ref('')
-const { setToken, setUtilisateur } = useAuth()
-const router = useRouter()
+const error = ref('')
+const { setToken, setUser } = useAuth()
 
-const connecter = async () => {
-  erreur.value = ''
+const connect = async () => {
+  error.value = ''
   try {
     const data = await $fetch('/api/login', {
       method: 'POST',
       body: {
         email: email.value,
-        mot_de_passe: password.value,
+        password: password.value,
       },
     })
 
-    console.log('Réponse API login:', data)
-
     if (data.error) {
-      erreur.value = data.error
+      error.value = data.error
     } else {
       setToken(data.token)
-      console.log('Token reçu :', data.token)
-
-      setUtilisateur(data.utilisateur)
-      router.push('/livres')
+      setUser(data.user)
+      navigateTo('/books')
     }
   } catch (e) {
-    erreur.value = 'Erreur de connexion au serveur'
+    error.value = 'Erreur de connexion au serveur'
     console.error(e)
   }
 }
@@ -57,7 +51,7 @@ const connecter = async () => {
           <CardTitle>Connexion</CardTitle>
         </CardHeader>
         <CardContent>
-          <form @submit.prevent="connecter">
+          <form @submit.prevent="connect">
             <div class="mb-3">
               <Label class="ml-3 mb-1">Email</Label>
               <Input class="bg-white" id="email" type="email" v-model="email" />
@@ -71,8 +65,8 @@ const connecter = async () => {
                 v-model="password"
               />
             </div>
-            <div v-if="erreur" class="text-red-500 text-sm mb-2">
-              {{ erreur }}
+            <div v-if="error" class="text-red-500 text-sm mb-2">
+              {{ error }}
             </div>
             <div class="mb-3 space-x-3">
               <Button>Connexion</Button>
@@ -99,7 +93,7 @@ const connecter = async () => {
             </div>
             <div class="mb-3">
               <Label class="ml-3 mb-1">Confirmation du mot de passe</Label>
-              <Input class="bg-white" id="password" type="text" />
+              <Input class="bg-white" id="passwordConfirm" type="text" />
             </div>
             <div class="mb-3 space-x-3">
               <Button>Création</Button>

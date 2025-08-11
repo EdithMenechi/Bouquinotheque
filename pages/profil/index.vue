@@ -1,11 +1,10 @@
 <script setup>
 import { useAuth } from '~/composables/useAuth'
 import { useToaster } from '@/stores/useToaster'
-import { useRouter } from 'vue-router'
+import { navigateTo } from '#app'
 
 const { token, load, clear } = useAuth()
 const toaster = useToaster()
-const router = useRouter()
 
 load()
 
@@ -20,18 +19,12 @@ const isDialogOpen = ref(false)
 
 async function deleteProfil() {
   try {
-    const { error } = await useFetch(`/api/profil`, {
+    const error = await $fetch(`/api/profil`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token.value}`,
       },
     })
-    if (error.value) {
-      toaster.showToast('Erreur lors de la suppression', 'error')
-      console.error(error.value)
-      return
-    }
-
     toaster.showToast('Profil supprimé avec succès', 'success')
     clear()
     navigateTo('/')
@@ -45,13 +38,13 @@ async function deleteProfil() {
   <Label class="m-3">Profil</Label>
   <main>
     <div v-if="profil" class="m-3 space-y-1.5">
-      <Label for="name">{{ profil.nom }}</Label>
+      <Label for="name">{{ profil.name }}</Label>
       <Label for="email">{{ profil.email }}</Label>
     </div>
     <div v-else>Chargement du profil...</div>
 
     <div class="space-x-3">
-      <Button @click="router.push(`/profil/edit`)">Modifier</Button>
+      <Button @click="navigateTo(`/profil/edit`)">Modifier</Button>
       <AlertDialog v-model:open="isDialogOpen">
         <AlertDialogTrigger as-child>
           <Button @click="isDialogOpen = true">Supprimer</Button>

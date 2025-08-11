@@ -1,8 +1,9 @@
 <script setup>
 import { useToaster } from '@/stores/useToaster'
+import { navigateTo } from '#app'
 
 const route = useRoute()
-const { data: book } = await useFetch('/api/livres/' + route.params.id, {
+const { data: book } = await useFetch('/api/books/' + route.params.id, {
   server: false,
 })
 
@@ -14,25 +15,21 @@ async function saveBook() {
     return
   }
 
-  const { data, error } = await useFetch(`/api/livres/${book.value.id}`, {
-    method: 'PUT',
-    body: {
-      titre: book.value.titre,
-      sous_titre: book.value.sous_titre,
-      tome: book.value.tome,
-      isbn: book.value.isbn,
-    },
-  })
-
-  if (error.value) {
+  try {
+    const data = await $fetch(`/api/books/${book.value.id}`, {
+      method: 'PUT',
+      body: {
+        title: book.value.title,
+        subtitle: book.value.subtitle,
+        volume: book.value.volume,
+        isbn: book.value.isbn,
+      },
+    })
+    toaster.showToast(`Livre modifié avec succès`, 'success')
+    navigateTo(`/books/${data.id}`)
+  } catch (error) {
     toaster.showToast('Erreur lors de la sauvegarde', 'error')
-    console.error(error.value)
-  } else {
-    toaster.showToast(
-      `Livre modifié avec succès (ID : ${data.value.id})`,
-      'success'
-    )
-    navigateTo(`/livres/${data.value.id}`)
+    console.error(error)
   }
 }
 </script>
@@ -43,14 +40,14 @@ async function saveBook() {
       <CardTitle>Edition d'un livre</CardTitle>
     </CardHeader>
     <CardContent>
-      <form @submit.prevent="saveBook">
+      <form v-if="book" @submit.prevent="saveBook">
         <div class="mb-3">
           <Label class="ml-3 mb-1">Titre</Label>
           <Input
             class="bg-white"
             id="title"
             type="text"
-            v-model="book.titre"
+            v-model="book.title"
             required
             placeholder="Titre du livre"
           />
@@ -75,7 +72,12 @@ async function saveBook() {
         </div>
         <div class="mb-3">
           <Label class="ml-3 mb-1">Tome</Label>
-          <Input class="bg-white" id="tome" type="text" v-model="book.tome" />
+          <Input
+            class="bg-white"
+            id="volume"
+            type="text"
+            v-model="book.volume"
+          />
         </div>
         <div class="mb-3">
           <Label class="ml-3 mb-1">Sous-titre</Label>
@@ -83,7 +85,7 @@ async function saveBook() {
             class="bg-white"
             id="subtitle"
             type="text"
-            v-model="book.sous_titre"
+            v-model="book.subtitle"
           />
         </div>
         <div class="mb-3">
@@ -118,6 +120,7 @@ async function saveBook() {
           <Toast />
         </div>
       </form>
+      <div v-else>Chargement...</div>
     </CardContent>
   </Card>
 </template>

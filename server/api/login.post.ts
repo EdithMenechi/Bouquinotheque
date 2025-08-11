@@ -23,7 +23,13 @@ export default defineEventHandler(async (event) => {
 
   // 3. Recherche de l'utilisateur
   const [user] = await sql`
-    SELECT * FROM utilisateurs WHERE email = ${email}
+    SELECT 
+      id, 
+      nom AS name, 
+      email, 
+      mot_de_passe AS password
+    FROM utilisateurs
+    WHERE email = ${email}
   `
   await sql.end()
 

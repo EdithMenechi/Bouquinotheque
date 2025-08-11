@@ -12,29 +12,35 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
+import { navigateTo } from '#app'
+import { useAuth } from '~/composables/useAuth'
+
+const { token, load } = useAuth()
+
+load()
 
 const route = useRoute()
-const { data: book } = await useFetch('/api/livres/' + route.params.id, {
+const { data: book } = await useFetch('/api/books/' + route.params.id, {
   server: false,
+  headers: {
+    Authorization: `Bearer ${token.value}`,
+  },
 })
 
 const toaster = useToaster()
-const router = useRouter()
 
 const isDialogOpen = ref(false)
 
 async function deleteBook() {
   try {
-    const { error } = await useFetch(`/api/livres/${route.params.id}`, {
+    const error = await $fetch(`/api/books/${route.params.id}`, {
       method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
     })
-    if (error.value) {
-      toaster.showToast('Erreur lors de la suppression', 'error')
-      console.error(error.value)
-      return
-    }
     toaster.showToast('Livre supprimé avec succès', 'success')
-    navigateTo('/livres')
+    navigateTo('/books')
   } catch (e) {
     toaster.showToast('Erreur réseau', 'error')
   }
@@ -44,13 +50,13 @@ async function deleteBook() {
 <template>
   <main>
     <div v-if="book" class="m-3 space-y-1.5">
-      <Label for="title">{{ book.titre }}</Label>
-      <Label for="tome">{{ book.tome }}</Label>
-      <Label for="subtitle">{{ book.sous_titre }}</Label>
+      <Label for="title">{{ book.title }}</Label>
+      <Label for="volume">{{ book.volume }}</Label>
+      <Label for="subtitle">{{ book.subtitle }}</Label>
       <div class="flex">
         <div class="w-1/2 p-4 bg-gray-200">COUVERTURE</div>
         <div class="w-1/2 p-4 space-y-1.5">
-          <Label for="writer">{{ book.auteurs?.join(', ') }}</Label>
+          <Label for="writer">{{ book.authors?.join(', ') }}</Label>
           <Label for="format">{{ book.format }}</Label>
           <Textarea
             v-model="summary"
@@ -69,9 +75,7 @@ async function deleteBook() {
         class="bg-[#FFF8E7]"
       ></Textarea>
       <div class="space-x-3">
-        <Button @click="router.push(`/livres/${book.id}-edit`)"
-          >Modifier</Button
-        >
+        <Button @click="navigateTo(`/books/${book.id}-edit`)">Modifier</Button>
         <AlertDialog v-model:open="isDialogOpen">
           <AlertDialogTrigger as-child>
             <Button @click="isDialogOpen = true">Supprimer</Button>

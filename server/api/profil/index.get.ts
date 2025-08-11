@@ -30,7 +30,11 @@ export default defineEventHandler(async (event) => {
 
   // 3. Récupération de l'utilisateur
   const profile = await sql`
-  SELECT * FROM utilisateurs WHERE id = ${userId} LIMIT 1
+  SELECT
+    id,
+    nom   AS name,
+    email
+  FROM utilisateurs WHERE id = ${userId} LIMIT 1
   `
 
   if (!profile || profile.length === 0) {

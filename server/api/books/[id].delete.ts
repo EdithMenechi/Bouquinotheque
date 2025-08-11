@@ -1,4 +1,4 @@
-import { defineEventHandler } from 'h3'
+import { defineEventHandler, createError } from 'h3'
 import { jwtVerify } from 'jose'
 import { useRuntimeConfig } from '#imports'
 import { usePostgres } from '~/server/utils/postgres'
@@ -12,8 +12,10 @@ export default defineEventHandler(async (event) => {
   // 2. Authentification
   const authHeader = getRequestHeader(event, 'authorization')
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    event.node.res.statusCode = 401
-    return { error: 'Token d’authentification manquant' }
+    throw createError({
+      statusCode: 401,
+      statusMessage: 'Token d’authentification manquant',
+    })
   }
 
   const token = authHeader.slice(7)
@@ -23,29 +25,33 @@ export default defineEventHandler(async (event) => {
     const { payload } = await jwtVerify(token, new TextEncoder().encode(SECRET))
     userId = payload.id as number
   } catch (err) {
-    throw createError({ statusCode: 401, statusMessage: 'Token invalide' })
+    event.node.res.statusCode = 401
+    return { error: 'Token invalide' }
   }
 
-  if (!userId) {
+  // 3. Récupération de l'ID du livre à supprimer
+  const bookId = event.context.params?.id
+
+  if (!bookId) {
     throw createError({ statusCode: 400, statusMessage: 'ID manquant' })
   }
 
   try {
-    // 3. Suppression de l'utilisateur
+    // 4. Suppression du livre de la table utilisateurs_livres
     const result = await sql`
         DELETE 
-        FROM utilisateurs
-        WHERE id = ${userId}
+        FROM utilisateurs_livres
+        WHERE utilisateur_id = ${userId} AND livre_id = ${bookId}
         RETURNING *
       `
 
-    // 4. Vérification si l'utilisateur existait
+    // 5. Vérification si le livre existait
     if (result.length === 0) {
-      throw createError({ statusCode: 404, statusMessage: 'Profil non trouvé' })
+      throw createError({ statusCode: 404, statusMessage: 'Livre non trouvé' })
     }
 
-    // 5. Réponse de succès
-    return { message: 'Profil supprimé avec succès', id: result[0].id }
+    // 6. Réponse de succès
+    return { message: 'Livre supprimé avec succès', id: result[0].id }
   } catch (error) {
     console.error(error)
     throw createError({
@@ -53,7 +59,7 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Erreur lors de la suppression',
     })
   } finally {
-    // 6. Fin propre de la connexion
+    // 7. Fin propre de la connexion
     event.waitUntil(sql.end())
   }
 })

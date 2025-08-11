@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   // 1. Initialisation de la connexion à la BDD
   const sql = usePostgres()
 
-  // 2. Récupération de l'ID du livre à supprimer
+  // 2. Récupération de l'ID du livre à modifier
   const id = event.context.params?.id
 
   if (!id) {
@@ -13,29 +13,35 @@ export default defineEventHandler(async (event) => {
   }
 
   // 3. Lecture du corps de la requête
+  const body = await readBody(event)
+  const { title, subtitle, volume, isbn } = body
+
   try {
-    // 4. Suppression du livre
-    const result = await sql`
-        DELETE FROM livres
-        WHERE id = ${id}
-        RETURNING *
-      `
+    // 4. Modification du livre
+    const result = await sql`UPDATE livres
+       SET titre = ${title},
+           sous_titre = ${subtitle},
+           tome = ${volume},
+           isbn = ${isbn}
+      WHERE id = ${id}
+      RETURNING *
+        `
 
     // 5. Vérification si le livre existait
     if (result.length === 0) {
       throw createError({ statusCode: 404, statusMessage: 'Livre non trouvé' })
     }
 
-    // 6. Réponse de succès
-    return { message: 'Livre supprimé avec succès', id: result[0].id }
+    // 5. Réponse de succès
+    return result[0]
   } catch (error) {
-    console.error(error)
+    console.error('Erreur SQL ou autre', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Erreur lors de la suppression',
+      statusMessage: 'Erreur lors de la mise à jour',
     })
   } finally {
-    // 7. Fin propre de la connexion
+    // 7. Fermeture propre de la connexion
     event.waitUntil(sql.end())
   }
 })

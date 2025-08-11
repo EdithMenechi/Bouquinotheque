@@ -32,14 +32,17 @@ export default defineEventHandler(async (event) => {
   // 3. Récupération des livres
   const books = await sql`
     SELECT
-        l.*,
-        (SELECT
-            array_agg(a.nom)
-            FROM auteurs a
-            LEFT JOIN livres_auteurs la ON a.id = la.auteur_id
-            WHERE la.livre_id = l.id
-         ) as auteurs,
-        f.format
+      l.id,
+      l.titre        AS title,
+      l.sous_titre   AS subtitle,
+      l.tome         AS volume,
+      (SELECT array_agg(a.nom)
+          FROM auteurs a
+          LEFT JOIN livres_auteurs la ON a.id = la.auteur_id
+          WHERE la.livre_id = l.id
+      )               AS authors,
+      f.format        AS format,
+      ul.utilisateur_id AS user_id
     FROM livres l
     LEFT JOIN formats f ON l.format_id = f.id
     INNER JOIN utilisateurs_livres ul ON ul.livre_id = l.id

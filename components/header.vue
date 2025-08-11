@@ -3,33 +3,31 @@ import NavigationMenu from './ui/navigation-menu/NavigationMenu.vue'
 import NavigationMenuItem from './ui/navigation-menu/NavigationMenuItem.vue'
 import NavigationMenuLink from './ui/navigation-menu/NavigationMenuLink.vue'
 import NavigationMenuList from './ui/navigation-menu/NavigationMenuList.vue'
-import { useRouter } from 'vue-router'
 import { useAuth } from '~/composables/useAuth'
 
-const { utilisateur, clear } = useAuth()
-const router = useRouter()
+const { user, clear } = useAuth()
 
-const deconnecter = () => {
+const disconnect = () => {
   clear()
-  router.push('/')
+  navigateTo('/')
 }
 </script>
 
 <template>
-  <div v-if="utilisateur" class="space-x-3">
-    <strong>Bonjour {{ utilisateur.nom }}</strong>
-    <Button @click="deconnecter">Déconnexion</Button>
+  <div v-if="user" class="space-x-3">
+    <strong>Bonjour {{ user.name }}</strong>
+    <Button @click="disconnect">Déconnexion</Button>
   </div>
-  <NavigationMenu v-if="utilisateur">
+  <NavigationMenu v-if="user">
     <NavigationMenuList>
       <NavigationMenuItem>
         <NavigationMenuLink href="/profil"> Profil </NavigationMenuLink>
       </NavigationMenuItem>
       <NavigationMenuItem>
-        <NavigationMenuLink href="/livres"> Mes livres </NavigationMenuLink>
+        <NavigationMenuLink href="/books"> Mes livres </NavigationMenuLink>
       </NavigationMenuItem>
       <NavigationMenuItem>
-        <NavigationMenuLink href="/livres/ajouter">
+        <NavigationMenuLink href="/books/add">
           Ajout d'un livre
         </NavigationMenuLink>
       </NavigationMenuItem>

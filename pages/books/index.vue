@@ -11,7 +11,7 @@ const { token, load } = useAuth()
 
 load()
 
-const { data: books } = await useFetch('/api/livres', {
+const { data: books } = await useFetch('/api/books', {
   server: false,
   headers: {
     Authorization: `Bearer ${token.value}`,
@@ -25,12 +25,12 @@ const { data: books } = await useFetch('/api/livres', {
     <Card v-for="book in books" :key="book.id" class="m-3">
       <CardHeader>
         <CardTitle
-          ><NuxtLink :to="`/livres/${book.id}`">{{
-            book.titre
+          ><NuxtLink :to="`/books/${book.id}`">{{
+            book.title
           }}</NuxtLink></CardTitle
         >
-        <CardDescription v-if="book.auteurs?.length">{{
-          book.auteurs.join(', ')
+        <CardDescription v-if="book.authors?.length">{{
+          book.authors.join(', ')
         }}</CardDescription>
         <CardDescription v-else>Auteurice.s inconnu.e.s</CardDescription>
       </CardHeader>
@@ -39,11 +39,11 @@ const { data: books } = await useFetch('/api/livres', {
           <div class="flex">
             <div class="w-1/2 p-4 bg-gray-200"></div>
             <div class="w-1/2 p-4 space-y-1.5">
-              <Label for="tome" v-if="book.tome?.length"
-                >Tome {{ book.tome }}</Label
+              <Label for="volume" v-if="book.volumevolume?.length"
+                >Tome {{ book.volume }}</Label
               >
-              <Label for="subtitle" v-if="book.sous_titre?.length">{{
-                book.sous_titre
+              <Label for="subtitle" v-if="book.subtitle?.length">{{
+                book.subtitle
               }}</Label>
               <Label for="format">{{ book.format }}</Label>
             </div>
