@@ -20,32 +20,45 @@ const { data: books } = await useFetch('/api/books', {
 </script>
 
 <template>
-  <Label class="m-3">Mes livres</Label>
-  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
+  <Label data-cy="page_title" class="m-3">Mes livres</Label>
+  <div data-cy="books" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
     <Card v-for="book in books" :key="book.id" class="m-3">
       <CardHeader>
-        <CardTitle
+        <CardTitle data-cy="book_title"
           ><NuxtLink :to="`/books/${book.id}`">{{
             book.title
           }}</NuxtLink></CardTitle
         >
-        <CardDescription v-if="book.authors?.length">{{
+        <CardDescription data-cy="book_authors" v-if="book.authors != null">{{
           book.authors.join(', ')
         }}</CardDescription>
-        <CardDescription v-else>Auteurice.s inconnu.e.s</CardDescription>
+        <CardDescription data-cy="book_authors2" v-else
+          >Auteurice.s inconnu.e.s</CardDescription
+        >
       </CardHeader>
       <CardContent>
         <form>
           <div class="flex">
             <div class="w-1/2 p-4 bg-gray-200"></div>
             <div class="w-1/2 p-4 space-y-1.5">
-              <Label for="volume" v-if="book.volumevolume?.length"
+              <Label
+                data-cy="book_volume"
+                for="volume"
+                v-if="book.volume != null"
                 >Tome {{ book.volume }}</Label
               >
-              <Label for="subtitle" v-if="book.subtitle?.length">{{
-                book.subtitle
-              }}</Label>
-              <Label for="format">{{ book.format }}</Label>
+              <Label
+                data-cy="book_subtitle"
+                for="subtitle"
+                v-if="book.subtitle != null"
+                >{{ book.subtitle }}</Label
+              >
+              <Label
+                data-cy="book_format"
+                for="format"
+                v-if="book.format != null"
+                >{{ book.format }}</Label
+              >
             </div>
           </div>
         </form></CardContent

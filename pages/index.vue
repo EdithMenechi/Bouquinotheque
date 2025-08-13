@@ -36,17 +36,27 @@ const connect = async () => {
 
 <template>
   <div>
-    <h1 class="text-2xl font-bold mb-4">Bienvenue sur mon application</h1>
-    <p class="mb-6">Gérez facilement vos livres et suivez vos lectures.</p>
-    <Button v-if="!showConnexion" @click="showConnexion = true"
+    <h1 data-cy="appli_title" class="text-2xl font-bold mb-4">
+      Bienvenue dans la bouquinothèque
+    </h1>
+    <p data-cy="appli_summary" class="mb-6">
+      Gérez facilement vos livres et suivez vos lectures.
+    </p>
+    <Button
+      v-if="!showConnexion"
+      @click="showConnexion = true"
+      data-cy="connection_button"
       >Se connecter</Button
     >
-    <Button v-if="!showCreation" @click="showCreation = true"
+    <Button
+      v-if="!showCreation"
+      @click="showCreation = true"
+      data-cy="creation_button"
       >Créer un compte</Button
     >
 
     <div v-if="showConnexion" class="grid grid-cols-2">
-      <Card class="m-3">
+      <Card data-cy="connection_card" class="m-3">
         <CardHeader>
           <CardTitle>Connexion</CardTitle>
         </CardHeader>
@@ -54,11 +64,18 @@ const connect = async () => {
           <form @submit.prevent="connect">
             <div class="mb-3">
               <Label class="ml-3 mb-1">Email</Label>
-              <Input class="bg-white" id="email" type="email" v-model="email" />
+              <Input
+                data-cy="connection_email"
+                class="bg-white"
+                id="email"
+                type="email"
+                v-model="email"
+              />
             </div>
             <div class="mb-3">
               <Label class="ml-3 mb-1">Mot de passe</Label>
               <Input
+                data-cy="connection_password"
                 class="bg-white"
                 id="passwordConfirm"
                 type="password"
@@ -69,8 +86,10 @@ const connect = async () => {
               {{ error }}
             </div>
             <div class="mb-3 space-x-3">
-              <Button>Connexion</Button>
-              <Button @click="showConnexion = false">Retour</Button>
+              <Button data-cy="connection_button">Connexion</Button>
+              <Button @click="showConnexion = false" data-cy="back_button"
+                >Retour</Button
+              >
             </div>
           </form>
         </CardContent>

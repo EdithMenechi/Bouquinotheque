@@ -12,7 +12,7 @@ CREATE TABLE livres (
     id SERIAL PRIMARY KEY,
     titre VARCHAR(255) NOT NULL,
     sous_titre VARCHAR(255),
-    tome VARCHAR(50),
+    tome INT,
     format_id INT REFERENCES formats(id),
     isbn VARCHAR(20) UNIQUE,
     couverture VARCHAR(255),

@@ -10,7 +10,8 @@
     "postinstall": "nuxt prepare",
     "format": "prettier --write .",
     "test:unit": "vitest",
-    "test:e2e": "cypress open"
+    "test:e2e": "cypress open",
+    "stop:cypress": "pkill -f Cypress || true"
   },
   "dependencies": {
     "@pinia/nuxt": "^0.11.0",

@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "title": "Réussir dans la police",
+    "subtitle": "Apprendre à mettre des contraventions",
+    "volume": 3,
+    "authors": ["Benjamin Clawhauser", "Chef Bogo"],
+    "user_id": 2016
+  },
+  {
+    "id": 2,
+    "title": "Les renards ne sont pas des fennecs",
+    "volume": 1,
+    "authors": ["Nick Wilde"],
+    "format": "Bande dessinée",
+    "user_id": 2016
+  }
+]
