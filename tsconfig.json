@@ -1,4 +1,15 @@
 {
-  // https://nuxt.com/docs/guide/concepts/typescript
-  "extends": "./.nuxt/tsconfig.json"
+  "extends": "./.nuxt/tsconfig.json",
+
+  "compilerOptions": {
+    // Indique à TS comment résoudre les alias
+    "paths": {
+      "@/*": ["./*"]
+    },
+    // Active les types pour Vitest et @testing-library
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
+
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  }
 }

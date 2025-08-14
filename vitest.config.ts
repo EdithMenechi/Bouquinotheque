@@ -1,11 +1,18 @@
 import { defineConfig } from 'vitest/config'
 import vue from '@vitejs/plugin-vue'
+import path from 'path'
 
 export default defineConfig({
   plugins: [vue()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './'),
+    },
+  },
   test: {
-    environment: 'jsdom', // pour tester le front Vue, sinon 'node' pour backend uniquement
+    environment: 'jsdom',
     globals: true,
-    setupFiles: './vitest.setup.ts', // si tu as un fichier de setup
+    setupFiles: './vitest.setup.ts',
+    include: ['tests/vitest/**/*.test.ts'],
   },
 })
