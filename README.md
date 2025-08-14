@@ -2,6 +2,7 @@
 Appli de répertoire de livres et leur rangement
 
 vitest : npm install -D vitest @vue/test-utils @testing-library/vue @testing-library/jest-dom
+npm install -D @types/testing-library__jest-dom
 Puis dans nuxt.config.ts :
 
 export default defineNuxtConfig({
@@ -22,6 +23,10 @@ test: {
   environment: 'jsdom',
   setupFiles: './vitest.setup.ts'
 }
+
+dans le terminal :
+pour lancer tous les tests unitaires : npm run test:unit
+pour lancer un fichier test : npm run test:unit:file -- tests/vitest/**.test.ts (chemin relatif du fichier)
 
 
 cypress : npm install -D cypress
