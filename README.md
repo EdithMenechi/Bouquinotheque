@@ -26,7 +26,7 @@ test: {
 
 dans le terminal :
 pour lancer tous les tests unitaires : npm run test:unit
-pour lancer un fichier test : npm run test:unit:file -- tests/vitest/**.test.ts (chemin relatif du fichier)
+pour lancer un fichier test : npm run test:unit:file -- **.test.ts (nom du fichier)
 
 
 cypress : npm install -D cypress
