@@ -37,13 +37,14 @@ async function saveBook() {
 <template>
   <Card class="m-3">
     <CardHeader>
-      <CardTitle>Edition d'un livre</CardTitle>
+      <CardTitle data-cy="page_title">Edition d'un livre</CardTitle>
     </CardHeader>
     <CardContent>
       <form v-if="book" @submit.prevent="saveBook">
         <div class="mb-3">
           <Label class="ml-3 mb-1">Titre</Label>
           <Input
+            data-cy="book_title"
             class="bg-white"
             id="title"
             type="text"
@@ -53,7 +54,7 @@ async function saveBook() {
           />
         </div>
         <div class="mb-3">
-          <Label class="ml-3 mb-1">Auteur.ice(s)</Label>
+          <Label data-cy="book_authors" class="ml-3 mb-1">Auteur.ice(s)</Label>
           <Input
             class="bg-white"
             id="writer"
@@ -62,7 +63,7 @@ async function saveBook() {
           />
         </div>
         <div class="mb-3">
-          <Label class="ml-3 mb-1">Rangement</Label>
+          <Label data-cy="book_place" class="ml-3 mb-1">Rangement</Label>
           <Input
             class="bg-white"
             id="place"
@@ -73,6 +74,7 @@ async function saveBook() {
         <div class="mb-3">
           <Label class="ml-3 mb-1">Tome</Label>
           <Input
+            data-cy="book_volume"
             class="bg-white"
             id="volume"
             type="text"
@@ -82,6 +84,7 @@ async function saveBook() {
         <div class="mb-3">
           <Label class="ml-3 mb-1">Sous-titre</Label>
           <Input
+            data-cy="book_subtitle"
             class="bg-white"
             id="subtitle"
             type="text"
@@ -91,6 +94,7 @@ async function saveBook() {
         <div class="mb-3">
           <Label class="ml-3 mb-1">Format</Label>
           <Input
+            data-cy="book_format"
             class="bg-white"
             id="format"
             type="text"
@@ -99,22 +103,43 @@ async function saveBook() {
         </div>
         <div class="mb-3">
           <Label class="ml-3 mb-1">Nombre de pages</Label>
-          <Input class="bg-white" id="pagesnumber" type="text" />
+          <Input
+            data-cy="book_pages_number"
+            class="bg-white"
+            id="pagesnumber"
+            type="text"
+          />
         </div>
         <div class="mb-3">
           <Label class="ml-3 mb-1">ISBN</Label>
-          <Input class="bg-white" id="isbn" type="text" v-model="book.isbn" />
+          <Input
+            data-cy="book_isbn"
+            class="bg-white"
+            id="isbn"
+            type="text"
+            v-model="book.isbn"
+          />
         </div>
         <div class="mb-3">
           <Label class="ml-3 mb-1">Résumé</Label>
-          <Textarea class="bg-white" id="summary" type="text"></Textarea>
+          <Textarea
+            data-cy="book_summary"
+            class="bg-white"
+            id="summary"
+            type="text"
+          ></Textarea>
         </div>
         <div class="mb-3">
           <Label class="ml-3 mb-1">Commentaire</Label>
-          <Textarea class="bg-white" id="comment" type="text"></Textarea>
+          <Textarea
+            data-cy="book_comment"
+            class="bg-white"
+            id="comment"
+            type="text"
+          ></Textarea>
         </div>
         <div class="mb-3">
-          <Button>Sauvegarder</Button>
+          <Button data-cy="save_book">Sauvegarder</Button>
         </div>
         <div>
           <Toast />

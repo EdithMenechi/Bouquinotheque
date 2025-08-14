@@ -1,4 +1,4 @@
-describe('Books page', () => {
+describe('Connection', () => {
   it('Connect user, display books', () => {
     // Charger la fixture de l'utilisateur
     cy.fixture('user_profil.json').then((user) => {
@@ -74,34 +74,6 @@ describe('Books page', () => {
         'Apprendre à mettre des contraventions'
       )
       cy.get('[data-cy=book_volume]').should('contain', 'Tome 3')
-    })
-
-    it('Create a new book', () => {
-      //   // Charger le fixture pour l'utilisateur
-      //   cy.fixture('user_profil.json').then((user) => {
-      //     // Mock du GET books
-      //     cy.fixture('books.json').then((books) => {
-      //       cy.intercept('GET', '/api/books', {
-      //         statusCode: 200,
-      //         body: books,
-      //       }).as('getBooks')
-      //       // Simuler un token et user déjà connectés
-      //       cy.visit('http://localhost:3000/books', {
-      //         onBeforeLoad(win) {
-      //           // Simuler le token dans le localStorage
-      //           win.localStorage.setItem('token', 'fake-token')
-      //           // Simuler l'utilisateur
-      //           win.localStorage.setItem('user', JSON.stringify(user))
-      //         },
-      //       })
-      //       // Attendre le mock GET books
-      //       cy.wait('@getBooks')
-      //       // Vérifier l'affichage des livres
-      //       books.forEach((book) => {
-      //         cy.contains(book.title).should('be.visible')
-      //       })
-      //     })
-      //   })
     })
   })
 })

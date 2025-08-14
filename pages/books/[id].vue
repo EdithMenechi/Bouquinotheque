@@ -50,15 +50,18 @@ async function deleteBook() {
 <template>
   <main>
     <div v-if="book" class="m-3 space-y-1.5">
-      <Label for="title">{{ book.title }}</Label>
-      <Label for="volume">{{ book.volume }}</Label>
-      <Label for="subtitle">{{ book.subtitle }}</Label>
+      <Label data-cy="book_title" for="title">{{ book.title }}</Label>
+      <Label data-cy="book_volume" for="volume">{{ book.volume }}</Label>
+      <Label data-cy="book_subtitle" for="subtitle">{{ book.subtitle }}</Label>
       <div class="flex">
         <div class="w-1/2 p-4 bg-gray-200">COUVERTURE</div>
         <div class="w-1/2 p-4 space-y-1.5">
-          <Label for="writer">{{ book.authors?.join(', ') }}</Label>
-          <Label for="format">{{ book.format }}</Label>
+          <Label data-cy="book_authors" for="authors">{{
+            book.authors?.join(', ')
+          }}</Label>
+          <Label data-cy="book_format" for="format">{{ book.format }}</Label>
           <Textarea
+            data-cy="book_summary"
             v-model="summary"
             placeholder="Résumé"
             class="bg-[#FFF8E7]"
@@ -66,33 +69,45 @@ async function deleteBook() {
         </div>
       </div>
 
-      <Label for="place">Rangement</Label>
-      <Label for="pagesnumber">Nb de pages</Label>
-      <Label for="isbn">ISBN {{ book.isbn }}</Label>
+      <Label data-cy="book_place" for="place">Rangement</Label>
+      <Label data-cy="book_pages_number" for="pagesnumber">Nb de pages</Label>
+      <Label data-cy="book_isbn" for="isbn">ISBN {{ book.isbn }}</Label>
       <Textarea
+        data-cy="book_comment"
         v-model="comment"
         placeholder="Commentaire"
         class="bg-[#FFF8E7]"
       ></Textarea>
       <div class="space-x-3">
-        <Button @click="navigateTo(`/books/${book.id}-edit`)">Modifier</Button>
+        <Button
+          data-cy="change_book_button"
+          @click="navigateTo(`/books/${book.id}-edit`)"
+          >Modifier</Button
+        >
         <AlertDialog v-model:open="isDialogOpen">
           <AlertDialogTrigger as-child>
-            <Button @click="isDialogOpen = true">Supprimer</Button>
+            <Button data-cy="delete_book_button" @click="isDialogOpen = true"
+              >Supprimer</Button
+            >
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Confirmer la suppression</AlertDialogTitle>
+              <AlertDialogTitle data-cy="delete_card"
+                >Confirmer la suppression</AlertDialogTitle
+              >
               <AlertDialogDescription>
                 Le livre sera définitivement supprimé et ne pourra pas être
                 récupéré
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel @click="isDialogOpen = false"
+              <AlertDialogCancel
+                data-cy="abort_delete_button"
+                @click="isDialogOpen = false"
                 >Conserver le livre</AlertDialogCancel
               >
               <AlertDialogAction
+                data-cy="confirm_delete_button"
                 @click="
                   () => {
                     deleteBook()

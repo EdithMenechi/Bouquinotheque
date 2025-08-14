@@ -8,6 +8,7 @@ const toaster = useToaster()
   <transition name="fade">
     <div
       v-if="toaster.visible"
+      :data-cy="`toast_${toaster.type}`"
       class="fixed bottom-6 right-6 z-50 max-w-xs p-4 rounded-lg shadow-lg flex items-center space-x-3"
       :class="
         toaster.type === 'success'

@@ -21,7 +21,7 @@ async function saveBook() {
       },
       body: { title: new_book.title },
     })
-    toaster.showToast(`Livre ajouté avec succès (ID : ${data.id})`, 'success')
+    toaster.showToast(`Livre ajouté avec succès`, 'success')
     navigateTo(`/books/${data.id}`)
   } catch (error) {
     toaster.showToast('Erreur lors de la sauvegarde', 'error')
@@ -33,13 +33,14 @@ async function saveBook() {
 <template>
   <Card class="m-3">
     <CardHeader>
-      <CardTitle>Ajout d'un livre</CardTitle>
+      <CardTitle data-cy="page_title">Ajout d'un livre</CardTitle>
     </CardHeader>
     <CardContent>
       <form @submit.prevent="saveBook">
         <div class="mb-3">
           <Label class="ml-3 mb-1">Titre</Label>
           <Input
+            data-cy="new_book_title"
             class="bg-white"
             id="title"
             type="text"
@@ -115,7 +116,7 @@ async function saveBook() {
           <Textarea class="bg-white" id="comment" type="text"></Textarea>
         </div>
         <div class="mb-3">
-          <Button>Sauvegarder</Button>
+          <Button data-cy="save_new_book">Sauvegarder</Button>
         </div>
       </form>
     </CardContent>
