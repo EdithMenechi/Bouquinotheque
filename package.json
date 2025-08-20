@@ -9,9 +9,9 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "format": "prettier --write .",
-    "test:unit": "vitest run",
-    "test:unit:file": "vitest run tests/vitest/",
-    "test:e2e": "cypress open",
+    "test:unit": "vitest run tests/vitest/",
+    "test:e2e:open": "cypress open",
+    "test:e2e": "cypress run",
     "stop:cypress": "pkill -f Cypress || true"
   },
   "dependencies": {
