@@ -116,3 +116,5 @@ dans package.json : "test:unit": "vitest",
 "stop:cypress": "pkill -f Cypress || true"
 
 npm install isbn3 : check validité de l'isbn
+
+/!\ ci : push désactivé
