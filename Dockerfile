@@ -1,9 +1,9 @@
-FROM node:23.11-alpine as base
+FROM node:23.11-alpine AS base
 ARG PORT=3000
 WORKDIR /src
 
 # Build
-FROM base as build
+FROM base AS build
 COPY --link package.json package-lock.json .
 RUN npm ci --omit dev
 COPY --link . .
