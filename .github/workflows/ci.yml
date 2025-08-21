@@ -25,8 +25,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/ma-biblio:latest
-            ghcr.io/${{ github.repository_owner }}/ma-biblio:${{ github.sha }}
+            ghcr.io/edithmenechi/ma-biblio:latest
+            ghcr.io/edithmenechi/ma-biblio:${{ github.sha }}
 
   tests:
     runs-on: ubuntu-latest
