@@ -1,15 +1,18 @@
-FROM node:23.11-alpine AS base
+FROM node:23.11.0-alpine AS base
 ARG PORT=3000
 WORKDIR /src
 
-# Build
-FROM base AS build
+# Deps
+FROM base AS deps
 COPY --link package.json package-lock.json .
 RUN npm ci --omit dev
+
+# Build
+FROM deps AS build
 COPY --link . .
 RUN npm run build
 
-# Run
+# Run (production)
 FROM base
 ENV PORT=$PORT
 ENV NODE_ENV=production
