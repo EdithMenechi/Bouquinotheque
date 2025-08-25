@@ -35,11 +35,11 @@ async function saveBook() {
 </script>
 
 <template>
-  <Card class="m-3">
-    <CardHeader>
+  <Card class="m-3 gap-0">
+    <CardHeader class="p-1 sm:p-4">
       <CardTitle data-cy="page_title">Edition d'un livre</CardTitle>
     </CardHeader>
-    <CardContent>
+    <CardContent class="p-1 sm:p-4">
       <form v-if="book" @submit.prevent="saveBook">
         <div class="mb-3">
           <Label class="ml-3 mb-1">Titre</Label>
@@ -138,8 +138,14 @@ async function saveBook() {
             type="text"
           ></Textarea>
         </div>
-        <div class="mb-3">
-          <Button data-cy="save_book">Sauvegarder</Button>
+        <div class="mt-6 space-x-3">
+          <Button type="submit" data-cy="save_book">Sauvegarder</Button>
+          <Button
+            type="button"
+            @click="navigateTo(`/books/${book.id}`)"
+            data-cy="back_button"
+            >Retour</Button
+          >
         </div>
         <div>
           <Toast />

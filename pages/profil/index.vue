@@ -35,47 +35,56 @@ async function deleteProfil() {
 </script>
 
 <template>
-  <Label class="m-3">Profil</Label>
-  <main>
-    <div v-if="profil" class="m-3 space-y-1.5">
-      <Label for="name">{{ profil.name }}</Label>
-      <Label for="email">{{ profil.email }}</Label>
-    </div>
-    <div v-else>Chargement du profil...</div>
+  <Card class="m-3 gap-0">
+    <CardHeader class="p-1 sm:p-4">
+      <CardTitle data-cy="page_title">Mon profil</CardTitle>
+    </CardHeader>
+    <CardContent class="p-1 sm:p-4">
+      <div
+        v-if="profil"
+        class="m-3 grid [grid-template-columns:auto_1fr] gap-x-3 gap-y-2 items-center"
+      >
+        <Label for="name" class="text-right font-semibold">Nom :</Label>
+        <span>{{ profil.name }}</span>
 
-    <div class="space-x-3">
-      <Button @click="navigateTo(`/profil/edit`)">Modifier</Button>
-      <AlertDialog v-model:open="isDialogOpen">
-        <AlertDialogTrigger as-child>
-          <Button @click="isDialogOpen = true">Supprimer</Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Confirmer la suppression</AlertDialogTitle>
-            <AlertDialogDescription>
-              Votre profil et toutes vos informations seront définitivement
-              supprimés et ne pourront pas être récupérés
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel @click="isDialogOpen = false"
-              >Conserver le profil</AlertDialogCancel
-            >
-            <AlertDialogAction
-              @click="
-                () => {
-                  deleteProfil()
-                  isDialogOpen = false
-                }
-              "
-              >Supprimer le profil</AlertDialogAction
-            >
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
-    <div>
-      <Toast />
-    </div>
-  </main>
+        <Label for="email" class="text-right font-semibold">Email :</Label>
+        <span>{{ profil.email }}</span>
+      </div>
+      <div v-else>Chargement du profil...</div>
+      <div class="mt-6 space-x-3">
+        <Button @click="navigateTo(`/profil/edit`)">Modifier</Button>
+        <AlertDialog v-model:open="isDialogOpen">
+          <AlertDialogTrigger as-child>
+            <Button @click="isDialogOpen = true">Supprimer</Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Confirmer la suppression</AlertDialogTitle>
+              <AlertDialogDescription>
+                Votre profil et toutes vos informations seront définitivement
+                supprimés et ne pourront pas être récupérés
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel @click="isDialogOpen = false"
+                >Conserver le profil</AlertDialogCancel
+              >
+              <AlertDialogAction
+                @click="
+                  () => {
+                    deleteProfil()
+                    isDialogOpen = false
+                  }
+                "
+                >Supprimer le profil</AlertDialogAction
+              >
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
+      <div>
+        <Toast />
+      </div>
+    </CardContent>
+  </Card>
 </template>

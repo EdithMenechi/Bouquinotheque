@@ -35,32 +35,37 @@ const connect = async () => {
 </script>
 
 <template>
-  <div>
-    <h1 data-cy="appli_title" class="text-2xl font-bold mb-4">
+  <div class="m-3">
+    <h1 data-cy="appli_title" class="text-2xl font-bold mb-3">
       Bienvenue dans la bouquinothèque
     </h1>
-    <p data-cy="appli_summary" class="mb-6">
-      Gérez facilement vos livres et suivez vos lectures.
+    <p data-cy="appli_title" class="mb-6">
+      Gérez facilement vos livres dans votre bibliothèque.
     </p>
-    <Button
-      v-if="!showConnexion"
-      @click="showConnexion = true"
-      data-cy="connection_button"
-      >Se connecter</Button
-    >
-    <Button
-      v-if="!showCreation"
-      @click="showCreation = true"
-      data-cy="creation_button"
-      >Créer un compte</Button
-    >
 
-    <div v-if="showConnexion" class="grid grid-cols-2">
-      <Card data-cy="connection_card" class="m-3">
-        <CardHeader>
+    <!-- Accueil -->
+    <div v-if="!showConnexion && !showCreation" class="flex space-x-3">
+      <Button
+        v-if="!showConnexion && !showCreation"
+        @click="showConnexion = true"
+        data-cy="connection_button"
+        >Se connecter</Button
+      >
+      <Button
+        v-if="!showConnexion && !showCreation"
+        @click="showCreation = true"
+        data-cy="creation_button"
+        >Créer un compte</Button
+      >
+    </div>
+
+    <!-- Connexion -->
+    <div v-if="showConnexion" class="flex justify-center">
+      <Card data-cy="connection_card" class="m-3 w-full max-w-md gap-0">
+        <CardHeader class="p-1 sm:p-4">
           <CardTitle>Connexion</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent class="p-1 sm:p-4">
           <form @submit.prevent="connect">
             <div class="mb-3">
               <Label class="ml-3 mb-1">Email</Label>
@@ -85,7 +90,7 @@ const connect = async () => {
             <div v-if="error" class="text-red-500 text-sm mb-2">
               {{ error }}
             </div>
-            <div class="mb-3 space-x-3">
+            <div class="mt-6 space-x-3">
               <Button data-cy="connection_button">Connexion</Button>
               <Button @click="showConnexion = false" data-cy="back_button"
                 >Retour</Button
@@ -95,12 +100,14 @@ const connect = async () => {
         </CardContent>
       </Card>
     </div>
-    <div v-if="showCreation" class="grid grid-cols-2">
-      <Card class="m-3">
-        <CardHeader>
+
+    <!-- Création de compte -->
+    <div v-if="showCreation" class="flex justify-center">
+      <Card class="m-3 w-full max-w-md gap-0">
+        <CardHeader class="p-1 sm:p-4">
           <CardTitle>Création de compte</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent class="p-1 sm:p-4">
           <form>
             <div class="mb-3">
               <Label class="ml-3 mb-1">Utilisateur</Label>
@@ -114,7 +121,7 @@ const connect = async () => {
               <Label class="ml-3 mb-1">Confirmation du mot de passe</Label>
               <Input class="bg-white" id="passwordConfirm" type="text" />
             </div>
-            <div class="mb-3 space-x-3">
+            <div class="space-x-3">
               <Button>Création</Button>
               <Button @click="showCreation = false">Retour</Button>
             </div>

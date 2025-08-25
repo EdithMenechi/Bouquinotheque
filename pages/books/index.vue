@@ -20,10 +20,9 @@ const { data: books } = await useFetch('/api/books', {
 </script>
 
 <template>
-  <Label data-cy="page_title" class="m-3">Mes livres</Label>
   <div data-cy="books" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
-    <Card v-for="book in books" :key="book.id" class="m-3">
-      <CardHeader>
+    <Card v-for="book in books" :key="book.id" class="m-3 gap-0">
+      <CardHeader class="p-1 sm:p-4">
         <CardTitle data-cy="book_title"
           ><NuxtLink :to="`/books/${book.id}`">{{
             book.title
@@ -36,27 +35,25 @@ const { data: books } = await useFetch('/api/books', {
           >Auteurice.s inconnu.e.s</CardDescription
         >
       </CardHeader>
-      <CardContent>
+      <CardContent class="p-1 sm:p-4">
         <form>
-          <div class="flex">
-            <div class="w-1/2 p-4 bg-gray-200"></div>
-            <div class="w-1/2 p-4 space-y-1.5">
-              <Label
-                data-cy="book_volume"
-                for="volume"
-                v-if="book.volume != null"
+          <div class="flex flex-col sm:flex-row">
+            <div class="w-full sm:w-1/2 p-1 sm:p-4 bg-gray-200">COUV</div>
+            <div class="w-full sm:w-1/2 p-1 sm:p-4 space-y-1.5">
+              <Label v-if="book.volume" data-cy="book_volume" for="volume"
                 >Tome {{ book.volume }}</Label
               >
               <Label
+                v-if="book.subtitle"
                 data-cy="book_subtitle"
                 for="subtitle"
-                v-if="book.subtitle != null"
                 >{{ book.subtitle }}</Label
               >
               <Label
+                v-if="book.format"
                 data-cy="book_format"
                 for="format"
-                v-if="book.format != null"
+                class="break-words"
                 >{{ book.format }}</Label
               >
             </div>

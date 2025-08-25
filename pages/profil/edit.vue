@@ -41,35 +41,47 @@ async function saveProfil() {
 }
 </script>
 <template>
-  <Label class="m-3">Edition Profil</Label>
-  <form @submit.prevent="saveProfil">
-    <div class="mb-3">
-      <Label class="ml-3 mb-1">Nom</Label>
-      <Input
-        class="bg-white"
-        id="name"
-        type="text"
-        v-model="profil.name"
-        required
-        placeholder="Nom d'utilisateur"
-      />
-    </div>
-    <div class="mb-3">
-      <Label class="ml-3 mb-1">Email</Label>
-      <Input
-        class="bg-white"
-        id="email"
-        type="email"
-        v-model="profil.email"
-        required
-        placeholder="Email"
-      />
-    </div>
-    <div class="mb-3">
-      <Button>Sauvegarder</Button>
-    </div>
-    <div>
-      <Toast />
-    </div>
-  </form>
+  <Card class="m-3 gap-0">
+    <CardHeader class="p-1 sm:p-4">
+      <CardTitle data-cy="page_title">Modifier le profil</CardTitle>
+    </CardHeader>
+    <CardContent class="p-1 sm:p-4">
+      <form @submit.prevent="saveProfil">
+        <div class="mb-3">
+          <Label class="ml-3 mb-1">Nom</Label>
+          <Input
+            class="bg-white"
+            id="name"
+            type="text"
+            v-model="profil.name"
+            required
+            placeholder="Nom d'utilisateur"
+          />
+        </div>
+        <div class="mb-3">
+          <Label class="ml-3 mb-1">Email</Label>
+          <Input
+            class="bg-white"
+            id="email"
+            type="email"
+            v-model="profil.email"
+            required
+            placeholder="Email"
+          />
+        </div>
+        <div class="mt-6 space-x-3">
+          <Button type="submit" data-cy="save_profil">Sauvegarder</Button>
+          <Button
+            type="button"
+            @click="navigateTo(`/profil`)"
+            data-cy="back_button"
+            >Retour</Button
+          >
+        </div>
+      </form>
+      <div>
+        <Toast />
+      </div>
+    </CardContent>
+  </Card>
 </template>

@@ -48,37 +48,56 @@ async function deleteBook() {
 </script>
 
 <template>
-  <main>
-    <div v-if="book" class="m-3 space-y-1.5">
-      <Label data-cy="book_title" for="title">{{ book.title }}</Label>
-      <Label data-cy="book_volume" for="volume">{{ book.volume }}</Label>
-      <Label data-cy="book_subtitle" for="subtitle">{{ book.subtitle }}</Label>
-      <div class="flex">
+  <Card v-if="book" class="m-3 gap-0">
+    <CardHeader class="p-1 sm:p-4">
+      <CardTitle data-cy="book_title">{{ book.title }}</CardTitle>
+      <CardDescription data-cy="book_authors" v-if="book.authors != null">{{
+        book.authors.join(', ')
+      }}</CardDescription>
+      <CardDescription data-cy="book_authors2" v-else
+        >Auteurice.s inconnu.e.s</CardDescription
+      >
+    </CardHeader>
+    <CardContent class="p-1 sm:p-4">
+      <div class="mb-3 flex">
         <div class="w-1/2 p-4 bg-gray-200">COUVERTURE</div>
         <div class="w-1/2 p-4 space-y-1.5">
-          <Label data-cy="book_authors" for="authors">{{
-            book.authors?.join(', ')
+          <Label v-if="book.volume" data-cy="book_volume" for="volume"
+            >Tome {{ book.volume }}</Label
+          >
+          <Label v-if="book.subtitle" data-cy="book_subtitle" for="subtitle">{{
+            book.subtitle
           }}</Label>
-          <Label data-cy="book_format" for="format">{{ book.format }}</Label>
-          <Textarea
-            data-cy="book_summary"
-            v-model="summary"
-            placeholder="Résumé"
-            class="bg-[#FFF8E7]"
-          ></Textarea>
+          <Label v-if="book.format" data-cy="book_format" for="format">{{
+            book.format
+          }}</Label>
         </div>
       </div>
+      <Textarea
+        data-cy="book_summary"
+        v-model="summary"
+        placeholder="Résumé"
+        class="w-full mb-3 bg-[#FFF8E7]"
+      ></Textarea>
+      <div
+        class="mb-3 grid [grid-template-columns:auto_1fr] gap-x-3 gap-y-2 items-center"
+      >
+        <Label for="name" class="text-right">Rangement :</Label>
+        <span></span>
 
-      <Label data-cy="book_place" for="place">Rangement</Label>
-      <Label data-cy="book_pages_number" for="pagesnumber">Nb de pages</Label>
-      <Label data-cy="book_isbn" for="isbn">ISBN {{ book.isbn }}</Label>
+        <Label for="email" class="text-right">Nb de pages :</Label>
+        <span></span>
+
+        <Label for="name" class="text-right">ISBN :</Label>
+        <span>{{ book.isbn }}</span>
+      </div>
       <Textarea
         data-cy="book_comment"
         v-model="comment"
         placeholder="Commentaire"
-        class="bg-[#FFF8E7]"
+        class="w-full mb-3 bg-[#FFF8E7]"
       ></Textarea>
-      <div class="space-x-3">
+      <div class="mt-6 space-x-3">
         <Button
           data-cy="change_book_button"
           @click="navigateTo(`/books/${book.id}-edit`)"
@@ -120,7 +139,7 @@ async function deleteBook() {
           </AlertDialogContent>
         </AlertDialog>
       </div>
-    </div>
-    <div v-else>Chargement</div>
-  </main>
+    </CardContent>
+  </Card>
+  <div v-else>Chargement</div>
 </template>
