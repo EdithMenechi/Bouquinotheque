@@ -99,7 +99,7 @@ async function deleteBook() {
       ></Textarea>
       <div class="mt-6 space-x-3">
         <Button
-          data-cy="change_book_button"
+          data-cy="edit_book_button"
           @click="navigateTo(`/books/${book.id}-edit`)"
           >Modifier</Button
         >

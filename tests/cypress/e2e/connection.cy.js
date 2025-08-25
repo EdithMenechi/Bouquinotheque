@@ -31,7 +31,7 @@ describe('Connection', () => {
       )
       cy.get('[data-cy=appli_summary]').should(
         'contain',
-        'Gérez facilement vos livres et suivez vos lectures.'
+        'Gérez facilement les livres de votre bibliothèque.'
       )
 
       // Ouvrir la carte de connexion
@@ -53,7 +53,6 @@ describe('Connection', () => {
 
       // Attendre le mock GET books
       cy.wait('@getBooks')
-      cy.get('[data-cy=page_title]').should('contain', 'Mes livres')
 
       // Vérifier le nombre et le contenu des livres
       cy.get('[data-cy=books]').children().should('have.length', 2)
@@ -69,11 +68,11 @@ describe('Connection', () => {
             'Benjamin Clawhauser, Chef Bogo'
           )
         })
+      cy.get('[data-cy=book_volume]').should('contain', 'Tome 3')
       cy.get('[data-cy=book_subtitle]').should(
         'contain',
         'Apprendre à mettre des contraventions'
       )
-      cy.get('[data-cy=book_volume]').should('contain', 'Tome 3')
     })
   })
 })

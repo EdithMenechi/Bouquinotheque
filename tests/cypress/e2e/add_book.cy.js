@@ -79,7 +79,7 @@ describe('Books gestion', () => {
       cy.get('[data-cy=book_subtitle]').should('be.empty')
 
       // Editer un livre
-      cy.get('[data-cy=change_book_button]').click()
+      cy.get('[data-cy=edit_book_button]').click()
       cy.url().should('include', '/books/42-edit')
 
       cy.get('[data-cy=page_title]').should('contain', "Edition d'un livre")

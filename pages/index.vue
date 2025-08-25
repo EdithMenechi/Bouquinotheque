@@ -39,8 +39,8 @@ const connect = async () => {
     <h1 data-cy="appli_title" class="text-2xl font-bold mb-3">
       Bienvenue dans la bouquinothèque
     </h1>
-    <p data-cy="appli_title" class="mb-6">
-      Gérez facilement vos livres dans votre bibliothèque.
+    <p data-cy="appli_summary" class="mb-6">
+      Gérez facilement les livres de votre bibliothèque.
     </p>
 
     <!-- Accueil -->
