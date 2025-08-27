@@ -17,3 +17,7 @@ logs
 .DS_Store
 .fleet
 .idea
+
+# Fichiers cypress
+tests/cypress/videos
+tests/cypress/screenshots

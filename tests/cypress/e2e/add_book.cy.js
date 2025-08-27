@@ -76,7 +76,7 @@ describe('Books gestion', () => {
         'contain',
         'La vengeance des agneaux'
       )
-      cy.get('[data-cy=book_subtitle]').should('be.empty')
+      cy.get('[data-cy=book_subtitle]').should('not.exist')
 
       // Editer un livre
       cy.get('[data-cy=edit_book_button]').click()
