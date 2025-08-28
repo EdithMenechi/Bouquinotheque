@@ -28,7 +28,19 @@ const connect = async () => {
       navigateTo('/books')
     }
   } catch (e) {
-    error.value = 'Erreur de connexion au serveur'
+    // Gestion des erreurs côté front
+    if (e?.response?.status === 400) {
+      error.value = 'Email et mot de passe requis'
+    } else if (e?.response?.status === 401) {
+      error.value = 'Mot de passe incorrect'
+    } else if (e?.response?.status === 404) {
+      error.value = 'Utilisateur non trouvé'
+    } else if (e?.message) {
+      // Erreurs réseau ou autres
+      error.value = e.message
+    } else {
+      error.value = 'Erreur de connexion au serveur'
+    }
     console.error(e)
   }
 }
